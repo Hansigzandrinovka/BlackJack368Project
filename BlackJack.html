@@ -147,23 +147,40 @@
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-						if(num == (cards.length)){num= 0;}
-						else{num = num+1;}	
-						
-						$("img").attr('src',getCard(0,"hearts"));			
+						addCard(4,"hearts","player1",1);			
 				
 					});	
 			
-					$('#button2').click(function(e){
+					$('#Stay').click(function(e){
 						e.preventDefault();
 						
-						if(num == 0){num= (cards.length - 1);}
-						else{num = num - 1;}				
-				
-						$("img").attr('src',cards[num]);						
+						addCard(2,"hearts","human",1);						
 						
 					});				
 			});
+			
+			
+			
+			function addCard(num,suite,player,numCards){
+			
+					var cardUrl = getCard(num,suite);							
+					
+					var image = "<img src='https://github.com/Hansigzandrinovka/BlackJack368Project/blob/master/Cards/card_back.png?raw=true' width='70' height='105' border='2' style=' position: relative; right: 30px ; border-color: white;'>"	;				
+					
+					if(player == "human"){
+					
+							$('#player').append(image);
+							
+												
+					}
+					else if(player == "player1"){
+					
+							$('#computer1').append(image);
+					}					
+					
+							
+							
+			}
 			</script>
  
  </head>
@@ -185,12 +202,12 @@
     		
     		
     		<th>
-    			<img src="https://github.com/Hansigzandrinovka/BlackJack368Project/blob/master/Cards/ace_of_clubs.png?raw=true" id = "specialcard" alt="some_text" width="70" height="105" border="2" style="border-color: white;">
+    			<img src='https://github.com/Hansigzandrinovka/BlackJack368Project/blob/master/Cards/ace_of_clubs.png?raw=true' id = 'specialcard' alt='some_text' width='70' height='105'>
     		</th>
     		
     		
     		<th>Console</th>
-  		</tr>
+  		</tr>	
  	
  	</table>
  	
@@ -221,30 +238,33 @@
   		<tr>
     		<th id = "computer1">
     			<img src="Cards/ace_of_clubs.png" border="2" alt="some_text" width="70" height="105">
-    			<img src="Cards/card_back.png" 
-    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
-    				onmouseout="this.src = 'Cards/card_back.png'" 	
-    				width="70" 
-    				height="105" 
-    				border="2" 
-    				style=" position: relative; right: 30px ; border-color: white;">
     			
-    			<img src="Cards/card_back.png" 
-    				alt="some_text" 
-    				width="70" 
-    				height="105" 
-    				border="2" 
-    				style=" position: relative; right: 60px ;border-color: white;"
-    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
-    				onmouseout="this.src = 'Cards/card_back.png'" >
     		</th>
     		
     		<th><h3>Pot: $200</h3></th> 
     		
-    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
+    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105">
+    		
+				<img src="Cards/card_back.png" 
+    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
+    				onmouseout="this.src = 'Cards/card_back.png'" 	
+    				width="70" 
+    				height="105"
+    				style=" position: relative; right: 30px ;">
+    			
+    			<img src="Cards/card_back.png" 
+    				alt="some_text" 
+    				width="70" 
+    				height="105"
+    				style=" position: relative; right: 60px ;"
+    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
+    				onmouseout="this.src = 'Cards/card_back.png'" >    		
+    		</th>
   		</tr> 	
   	
   	</table>
+
+	<br>
 
 	<table border="1" style="width:100%">
  		
@@ -315,7 +335,7 @@
     			
     		</th>
     		
-    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th> 
+    		<th id = "player"><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th> 
     		
     		<th>
     			<button type="button" id = "HitMe" >Hit Me</button>
