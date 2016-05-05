@@ -1,0 +1,50 @@
+body {
+    background-image: url("Background3.jpg");
+    background-size: 1700px 700px;
+    height: 100%;
+}
+
+h1 {
+	font-size: 80px;
+	color: white;
+	position: absolute;
+	left:500px;
+}
+
+button {
+  display: inline-block;
+  padding: 9px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;	
+  text-decoration: none;
+  outline: none;
+  color: white;
+  background-color: green;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px #0B3B17;
+}
+
+button:hover {background-color: #3e8e41;}
+
+button:active {
+  background-color: #58FA58;
+  box-shadow: 0 5px #58FA58;
+  transform: translateY(2px);
+}
+
+img{
+	border-color:white;
+	position: relative;
+}
+img:hover {
+	transform: translateY(-4px);
+}
+
+table,tr, td, th{
+	border: 1;
+}
+
+
+
