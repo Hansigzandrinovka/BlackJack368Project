@@ -35,15 +35,15 @@ button:active {
 }
 
 img{
-	border-color:white;
 	position: relative;
+	border:2px solid white;
 }
 img:hover {
 	transform: translateY(-4px);
 }
 
 table,tr, td, th{
-	border: 1;
+	border: 0;
 }
 
 
