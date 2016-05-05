@@ -147,7 +147,7 @@
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-						addCard(4,"hearts","player1",1);			
+						addCard(4,"hearts","player1",0);			
 				
 					});	
 			
@@ -161,22 +161,47 @@
 			
 			
 			
-			function addCard(num,suite,player,numCards){
+			function addCard(num,suite,player,numCard){
 			
-					var cardUrl = getCard(num,suite);							
+					var cardUrl = getCard(num,suite);									
 					
-					var image = "<img src='Cards/card_back.png' width='70' height='105' border='2' style=' position: relative; right: 30px ; border-color: white;'>"	;				
+					var identity = player + numCard.toString();	
+					
+					var image = ""					
+					
+					if(numCard == 0 ){
+					
+						image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+					}
+					else{
+						image = "<img src='Cards/card_back.png' width='70' height='105' border='2'>";
+					}
+										
+									
 					
 					if(player == "human"){
-					
+												
 							$('#player').append(image);
-							
+							$('#player').find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
+							$('#player').find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'")
 												
 					}
 					else if(player == "player1"){
 					
 							$('#computer1').append(image);
-					}					
+					}
+					else if(player == "player2"){
+					
+							$('#computer2').append(image);
+					}	
+					else if(player == "player3"){
+					
+							$('#computer3').append(image);
+					}	
+					else if(player == "player4"){
+					
+							$('#computer4').append(image);
+					}						
 					
 							
 							
