@@ -1,14 +1,24 @@
 body {
-    background-image: url("https://github.com/Hansigzandrinovka/BlackJack368Project/blob/master/Background3.jpg?raw=true");
+    background-image: url("Background3.jpg");
     background-size: 1700px 700px;
     height: 100%;
 }
 
 h1 {
-	font-size: 80px;
+	font-size: 40px;
 	color: white;
-	position: absolute;
-	left:500px;
+}
+
+h2 {
+
+	font-size: 15px;
+	color: white;
+}
+
+h4 {
+
+	font-size:20px;
+	color: red;
 }
 
 button {
@@ -43,7 +53,7 @@ img:hover {
 }
 
 table,tr, td, th{
-	border: 0;
+	border:0;
 }
 
 
