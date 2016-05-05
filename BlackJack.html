@@ -1,0 +1,317 @@
+<html>
+
+
+
+ <head>
+ 
+ 	<title>BlackJack</title>
+ 	
+ 	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+ 	<script>
+ 
+		var cards = [
+						"Cards/ace_of_clubs.png",
+						"Cards/2_of_clubs.png",
+						"Cards/3_of_clubs.png",
+						"Cards/4_of_clubs.png",
+						"Cards/5_of_clubs.png",
+						"Cards/6_of_clubs.png",
+						"Cards/7_of_clubs.png",
+						"Cards/8_of_clubs.png",
+						"Cards/9_of_clubs.png",
+						"Cards/10_of_clubs.png",
+						"Cards/jack_of_clubs.png",
+						"Cards/queen_of_clubs.png",
+						"Cards/king_of_clubs.png",
+						"Cards/ace_of_hearts.png",
+						"Cards/2_of_hearts.png",
+						"Cards/3_of_hearts.png",
+						"Cards/4_of_hearts.png",
+						"Cards/5_of_hearts.png",
+						"Cards/6_of_hearts.png",
+						"Cards/7_of_hearts.png",
+						"Cards/8_of_hearts.png",
+						"Cards/9_of_hearts.png",
+						"Cards/10_of_hearts.png",
+						"Cards/jack_of_hearts.png",
+						"Cards/queen_of_hearts.png",
+						"Cards/king_of_hearts.png",
+						"Cards/ace_of_diamonds.png",
+						"Cards/2_of_diamonds.png",
+						"Cards/3_of_diamonds.png",
+						"Cards/4_of_diamonds.png",
+						"Cards/5_of_diamonds.png",
+						"Cards/6_of_diamonds.png",
+						"Cards/7_of_diamonds.png",
+						"Cards/8_of_diamonds.png",
+						"Cards/9_of_diamonds.png",
+						"Cards/9_of_diamonds.png",
+						"Cards/jack_of_diamonds.png",
+						"Cards/queen_of_diamonds.png",
+						"Cards/king_of_diamonds.png",
+						"Cards/ace_of_spades.png",
+						"Cards/2_of_spades.png",
+						"Cards/3_of_spades.png",
+						"Cards/4_of_spades.png",
+						"Cards/5_of_spades.png",
+						"Cards/6_of_spades.png",
+						"Cards/7_of_spades.png",
+						"Cards/8_of_spades.png",
+						"Cards/9_of_spades.png",
+						"Cards/10_of_spades.png",
+						"Cards/jack_of_spades.png",
+						"Cards/queen_of_spades.png",
+						"Cards/king_of_spades.png",
+						"Cards/card_back.png"
+					];
+		
+		function getCard(num,suite){
+		
+			if(num == 0){ return cards[52];}
+			else if(suite == "spades"){
+				
+				if(num == 1){return cards[39];}
+				else if(num == 2){return cards[40];}	
+				else if(num == 3){return cards[41];}
+				else if(num == 4){return cards[42];}
+				else if(num == 5){return cards[43];}
+				else if(num == 6){return cards[44];}
+				else if(num == 7){return cards[45];}
+				else if(num == 8){return cards[46];}
+				else if(num == 9){return cards[47];}
+				else if(num == 10){return cards[48];}
+				else if(num == 11){return cards[49];}
+				else if(num == 12){return cards[50];}
+				else if(num == 13){return cards[51];}
+											
+			}
+			
+			else if(suite == "clubs"){
+			
+				if(num == 1){return cards[0];}
+				else if(num == 2){return cards[1];}	
+				else if(num == 3){return cards[2];}
+				else if(num == 4){return cards[3];}
+				else if(num == 5){return cards[4];}
+				else if(num == 6){return cards[5];}
+				else if(num == 7){return cards[6];}
+				else if(num == 8){return cards[7];}
+				else if(num == 9){return cards[8];}
+				else if(num == 10){return cards[9];}
+				else if(num == 11){return cards[10];}
+				else if(num == 12){return cards[11];}
+				else if(num == 13){return cards[12];}			
+			
+			}
+			
+			else if(suite == "hearts"){
+			
+				if(num == 1){return cards[13];}
+				else if(num == 2){return cards[14];}	
+				else if(num == 3){return cards[15];}
+				else if(num == 4){return cards[16];}
+				else if(num == 5){return cards[17];}
+				else if(num == 6){return cards[18];}
+				else if(num == 7){return cards[19];}
+				else if(num == 8){return cards[20];}
+				else if(num == 9){return cards[21];}
+				else if(num == 10){return cards[22];}
+				else if(num == 11){return cards[23];}
+				else if(num == 12){return cards[24];}
+				else if(num == 13){return cards[25];}			
+			
+			}
+			else if(suite == "diamonds"){
+			
+				if(num == 1){return cards[26];}
+				else if(num == 2){return cards[27];}	
+				else if(num == 3){return cards[28];}
+				else if(num == 4){return cards[29];}
+				else if(num == 5){return cards[30];}
+				else if(num == 6){return cards[31];}
+				else if(num == 7){return cards[32];}
+				else if(num == 8){return cards[33];}
+				else if(num == 9){return cards[34];}
+				else if(num == 10){return cards[35];}
+				else if(num == 11){return cards[36];}
+				else if(num == 12){return cards[37];}
+				else if(num == 13){return cards[38];}			
+			
+			}
+		}		
+		
+		var num = 0;				
+ 
+ 		$( document ).ready(function() {		
+					$('#HitMe').click(function(e){
+						e.preventDefault();
+								
+						if(num == (cards.length)){num= 0;}
+						else{num = num+1;}	
+						
+						$("img").attr('src',getCard(0,"hearts"));			
+				
+					});	
+			
+					$('#button2').click(function(e){
+						e.preventDefault();
+						
+						if(num == 0){num= (cards.length - 1);}
+						else{num = num - 1;}				
+				
+						$("img").attr('src',cards[num]);						
+						
+					});				
+			});
+			</script>
+ 
+ </head>
+ 
+ 
+ 
+ <body>
+	
+	<table border="1" style="width:100%">
+ 		
+		<colgroup>
+    	<col style="width: 33%" />
+   	<col style="width: 33%" />
+    	<col style="width: 33%" />
+  		</colgroup> 		
+ 		
+ 		<tr>
+    		<th></th>
+    		<th>
+    			<img src="Cards/card_back.png" id = "specialcard" alt="some_text" width="70" height="105" border="2" style="border-color: white;">
+    		</th>
+    		<th></th>
+  		</tr>
+ 	
+ 	</table>
+ 	
+ 	<table border="1" style="width:100%">
+ 		
+		<colgroup>
+    	<col style="width: 33%" />
+   	<col style="width: 33%" />
+    	<col style="width: 33%" />
+  		</colgroup> 		
+ 		
+ 		<tr>
+    		<th><h3>Player 1</h3></th>
+    		<th></th>
+    		<th><h3>Player 2</h3></th>
+  		</tr>
+ 	
+ 	</table>
+	
+	<table border="1" style="width:100%">
+		
+		<colgroup>
+    	<col style="width: 33%" />
+   	<col style="width: 33%" />
+    	<col style="width: 33%" />
+  		</colgroup>	
+  		
+  		<tr>
+    		<th id = "computer1">
+    			<img src="Cards/ace_of_clubs.png" border="2" alt="some_text" width="70" height="105">
+    			<img src="Cards/card_back.png" 
+    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
+    				onmouseout="this.src = 'Cards/card_back.png'" 	
+    				width="70" 
+    				height="105" 
+    				border="2" 
+    				style=" position: relative; right: 30px ; border-color: white;">
+    			
+    			<img src="Cards/card_back.png" 
+    				alt="some_text" 
+    				width="70" 
+    				height="105" 
+    				border="2" 
+    				style=" position: relative; right: 60px ;border-color: white;"
+    				onmouseover="this.src = 'Cards/ace_of_clubs.png'" 
+    				onmouseout="this.src = 'Cards/card_back.png'" >
+    		</th>
+    		<th></th> 
+    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
+  		</tr> 	
+  	
+  	</table>
+
+	<table border="1" style="width:100%">
+ 		
+		<colgroup>
+    	<col style="width: 45%" />
+   	<col style="width: 10%" />
+    	<col style="width: 45%" />
+  		</colgroup> 		
+ 		
+ 		<tr>
+    		<th><h3>Player 3</h3></th>
+    		<th></th>
+    		<th><h3>Player 4</h3></th>
+  		</tr>
+ 	
+ 	</table>
+	
+
+ 	<table border="1" style="width:100%">
+ 		
+		<colgroup>
+    	<col style="width: 45%" />
+   	<col style="width: 10%" />
+    	<col style="width: 45%" />
+  		</colgroup> 		
+ 		
+ 		<tr>
+    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
+    		<th></th>
+    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
+  		</tr>
+ 	
+ 	</table>
+ 	
+	<table border="1" style="width:100%">
+ 		
+		<colgroup>
+    	<col style="width: 33%" />
+   	<col style="width: 33%" />
+    	<col style="width: 33%" />
+  		</colgroup> 		
+ 		
+ 		<tr>
+    		<th></th>
+    		<th><h3>Person</h3></th>
+    		<th></th>
+  		</tr>
+ 	
+ 	</table> 	
+ 	
+ 	
+ 	<table border="1" style="width:100%">
+ 	
+ 		<colgroup>
+    	<col style="width: 33%" />
+   	<col style="width: 33%" />
+    	<col style="width: 33%" />
+  		</colgroup>  		
+ 				
+  		<tr>
+    		<th></th>
+    		<th><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th> 
+    		<th>
+    			<button type="button" id = "HitMe" >Hit Me</button>
+				<button type="button" id = "Stay" >Stay</button>
+			</th>
+  		</tr>
+ 	
+ 	</table>
+ 	
+ 	
+</body>
+
+ 
+ 
+</html>
