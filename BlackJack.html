@@ -154,8 +154,23 @@
 					$('#Stay').click(function(e){
 						e.preventDefault();
 						
-						changeMoney(100000,"human","Bob");						
+						changeMoney(100000,"human","Bob");
+						changeMessage("Hello World!");						
 						
+					});
+					
+					$('#Up').click(function(e){
+						e.preventDefault();
+								
+									
+				
+					});
+					
+					$('#Down').click(function(e){
+						e.preventDefault();
+								
+									
+				
 					});				
 			});
 			
@@ -260,6 +275,19 @@
 				}		
 					
 			}
+			
+			
+			function changeMessage(message){
+			
+				$('#Message').empty();					
+				$('#Message').append(message);
+			
+			}
+			
+			function changeBet(amount){
+			
+				$()			
+			}
 			</script>
  
  </head>
@@ -300,7 +328,7 @@
  		
  		<tr>
     		<th><h3 id="money_player1">Player 1: $100</h3></th>
-    		<th id = "Message"><h4>Messages Displayed here</h4></th>
+    		<th><h4 id = "Message">Messages Displayed here</h4></th>
     		<th><h3 id="money_player2">Player 2: $100</h3></th>
   		</tr>
  	
@@ -403,10 +431,13 @@
     		<th>
     			
 				<form>
-					$ <input type="text" name="BetAmount"><br>
+					<font size="5">$</font><input type="text" name="BetAmount" value="0"><br>
 				</form> 
-				
+								
+				<button type="button" id = "Down" >-$10</button>
+				<button type="button" id = "Up" >+$10</button>
 				<button type="button" id = "BetButton" >Place Bet</button>   			
+    			
     			
     		</th>
     		

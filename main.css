@@ -23,7 +23,7 @@ h4 {
 
 button {
   display: inline-block;
-  padding: 9px 20px;
+  padding: 2px 5px;
   font-size: 24px;
   cursor: pointer;
   text-align: center;	
@@ -54,6 +54,14 @@ img:hover {
 
 table,tr, td, th{
 	border:0;
+}
+
+
+input{
+	
+	font-size: 30px;
+	width: 100px;
+	text-align: right;
 }
 
 
