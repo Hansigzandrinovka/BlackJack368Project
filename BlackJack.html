@@ -247,6 +247,11 @@
 			
 			}
 			
+			function changePot(amount){
+			
+				$('#money-pot').html('Pot: $' + amount.toString());
+			}
+			
 			
 			</script>
  
@@ -286,7 +291,7 @@
     	<col style="width: 33%" />
   		</colgroup> 		
  		
- 		<tr height ="5">
+ 		<tr>
     		<th id="money_player1"><h3><span class="name">Player 1</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th><h4 id = "Message">Messages Displayed here</h4></th>
     		<th id="money_player2"><h3><span class="name">Player 2</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>

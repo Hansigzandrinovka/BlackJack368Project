@@ -17,8 +17,19 @@ h2 {
 
 h4 {
 
-	font-size:20px;
+	font-size:30px;
 	color: red;
+}
+
+h3{
+	vertical-align:top;
+	font-size: 20px;
+	
+}
+
+h3,h4{
+	margin:0;
+	padding:0;
 }
 
 button {
