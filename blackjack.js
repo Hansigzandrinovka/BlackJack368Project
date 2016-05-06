@@ -1,16 +1,24 @@
 function blackjackGame(){ //game gets initialized when you create a blackjack game
   this.deck = new Deck();
-  this.players = this.initPlayers()
+  this.players = [];
 
-  this.initPlayers = function(name){
-    var players = [];
-    players.push(new Player("AI1","Noob",10000));
-    players.push(new Player("AI1","Noob",10000));
-    players.push(new Player("AI1","Noob",10000));
-    players.push(new Player("AI1","Noob",10000));
-    players.push(new Player(name,null,10000));
-    return players;
-  }
+  this.initGame = function(playerDefs){
+    //playerDefs example: [[name,type,initialBanked],[name,type,initialBanked], etc]
+    //exactly 5 players are required
+    this.initPlayers(playerDefs);
+    this.deck.initDeck();
+  };
+
+  this.initPlayers = function(playerDefs){
+    for(var i=0; i<playerDefs.length; i++){
+      this.players.push(new Player(playerDefs[i][0],playerDefs[i][0],playerDefs[i][0]));
+    }
+    // players.push(new Player("AI1","Noob",10000));
+    // players.push(new Player("AI1","Noob",10000));
+    // players.push(new Player("AI1","Noob",10000));
+    // players.push(new Player("AI1","Noob",10000));
+    // players.push(new Player(name,null,10000));
+  };
 
   this.pot = 0;
 
@@ -20,26 +28,26 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     this.getBets();
     this.playTurns();
     this.resolveGame();
-  }
+  };
 
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
     this.refreshScreen(this.players, this.pot, "Let's begin.");
-  }
+  };
 
   this.dealCards = function(){ //at start of game, give each player 2 cards
     for(var i=0; i<this.players.length; i++){
       this.players[i].addCards(this.deck.drawCards(2));
       this.refreshScreen(this.players);
     }
-  }
+  };
 
   this.resetPlayers = function(){
     for(var i=0; i<this.players.length; i++){
       this.players[i].reset();  //each player needs a reset method that empties out player hand and resets bet stat to 0
     }
-  }
+  };
 
   this.getBets = function(){ //polls all players for the amount they want to bet for this game, taking the money from the players
     var bet = 0;
@@ -47,12 +55,12 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       this.pot += this.players[i].getBet(); //player object should update its bankroll
       this.refreshScreen(this.players, this.pot);
     }
-  }
+  };
 
-  this.playTurns(){
+  this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
       var move = [];
-      while(this.players[i].busted == false && this.players[i].myTurn == true){
+      while(this.players[i].busted === false && this.players[i].myTurn === true){
         move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
         if(move == 'stand'){ //player waits for round to end
           this.players[i].myTurn = false;
@@ -71,6 +79,24 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
         this.refreshScreen(this.players);
       }
     }
+  };
+
+  this.makeMove = function(move, player){
+    if(move == 'stand'){ //player waits for round to end
+      this.players[i].myTurn = false;
+    }
+    else if(move == 'hit'){ //player gets another card
+      this.players[i].addCards(this.deck.drawCards(1));
+      var amount = this.players[i].getTotalAmount();
+      if(amount > 21){
+        this.players[i].busted = true;
+        this.players[i].myTurn = false;
+      }
+    }
+    else {
+      //do nothing for now
+    }
+    this.refreshScreen(this.players);
   }
 
   this.getWinners = function(){ //checks who is not busted, and determines who won
@@ -87,18 +113,18 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       }
     }
 
-    if(max == 0){
+    if(max === 0){
       //All players were busted, so everyone splits the pot
       return this.players;
     } else {
       return winners;
     }
-  }
+  };
 
-  this.resolveGame(){
+  this.resolveGame = function(){
     this.distributeWinnings(this.pot/winners.length, this.getWinners());
     this.collectDiscards();
-  }
+  };
 
   this.collectDiscards = function(){
     var discards = [];
@@ -106,22 +132,22 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       discards.concat(this.players[i].returnCards());
     }
     this.deck.returnCards(discards);
-  }
+  };
 
   this.distributeWinnings = function(amount, players){
     for(var i=0; i<this.players.length; i++){
       this.players[i].givePlayerMoney(amount);
     }
-  }
+  };
 
-  this.refreshScreen = function(players, message = ""){ //presumably clears the screen, then updates it with new information
+  this.refreshScreen = function(players, pot, message = "", showAllCards = true){ //presumably clears the screen, then updates it with new information
     setTimeout(function(){},2000); //maybe?
     //Call's to Alex's functions here
-  }
+  };
 }
 
 function Deck(){
-  this.active = this.initDeck();
+  this.active = [];
 
   this.initDeck = function(){ //builds deck randomly out of 4 decks of 52 cards
     for(var i=0; i<4; i++){
@@ -133,19 +159,19 @@ function Deck(){
       }
     }
     this.shuffle();
-  }
+  };
 
   this.discards = [];
 
   this.drawCards = function(num){
     return this.active.splice(0,num);
-  }
+  };
 
   this.returnCards = function(cards){ //returns cards to discard pile
     for(var i=0; i<cards.length; i++){
       this.discards.push(cards[i]);
     }
-  }
+  };
 
 //Note: this shuffle function is based on one I found on StackOverflow
 //http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
@@ -160,7 +186,7 @@ function Deck(){
         a[i - 1] = a[j];
         a[j] = x;
     }
-  }
+  };
 }
 
 function Card(suit,value){
@@ -181,7 +207,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	{
 		this.name = "Shawn! SHAAAAAAAAAAAAAWN!";
 	}
-	else if((name == null) || (name == "")) //fixes bad inputs
+	else if((name === null) || (name === "")) //fixes bad inputs
 	{
 		this.name = "New Player";
 	}
@@ -250,21 +276,21 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	//if a valid Card is given, adds to player's array
 	this.givePlayerCard = function(theCard)
 	{
-		if(theCard != null) //checks if user is supplying something
+		if(theCard !== null) //checks if user is supplying something
 		{
-			if(theCard.suite != null) //checks if user is supplying a card
+			if(theCard.suite !== null) //checks if user is supplying a card
 			{
 				this.cards.push(theCard); //if so, add the card
 			}
 		}
-	}
+	};
 
 	//output: a list of Cards
 	//this method is here for safety sake - ie the single vs double = typo
 	this.getPlayerHand = function()
 	{
 		return this.cards;
-	}
+	};
 
 	//output: True/False to "has the user run out of cards?"
 	//if one exists, removes the first card from the player's hand, this would be a clean-up method
@@ -279,16 +305,16 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		{
 			return true;
 		}
-	}
+	};
 
 	this.getPlayerHandValues = function() //to be deleted
 	{
 		return this.cardVals;
-	}
+	};
 	this.getPlayerHandSuites = function() //to be deleted
 	{
 		return this.cardSuites;
-	}
+	};
 
 	//input: an index to poll
 	//output: the Card at that index, or null if none exists
@@ -303,7 +329,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		{
 			return null;
 		}
-	}
+	};
 
 	//input: a postive integer amount
 	//if valid, adds amount to player's banked
@@ -313,13 +339,13 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		{
 			this.banked += amount;
 		}
-	}
+	};
 
 	//output: returns how much money player has banked
 	this.getBanked = function()
 	{
 		return this.banked;
-	}
+	};
 
 	//input: a positive integer amount
 	//output: True or False answering "Is the player out of money?"
@@ -339,7 +365,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 				return false;
 			}
 		}
-	}
+	};
 
 	//-----------------------------------------------------AI logic definitions---------------------------------------
 
@@ -374,7 +400,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					continueTurn = false;
 				}
 			}
-		}
+		};
 	}
 	else if(this.isAI == "Noob")
 	{
@@ -405,7 +431,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					continueTurn = false;
 				}
 			}
-		}
+		};
 	}
 	else if(this.isAI == "Dealer Wannabe")
 	{
@@ -428,7 +454,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			{
 				this.busted = true;
 			}
-		}
+		};
 	}
 	else if(this.isAI == "Random Guy")
 	{
@@ -455,13 +481,53 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					this.busted = true;
 				}
 			}
-		}
+		};
 	}
 }
 
+//// In 'Start Game' button
+// get player name
+
 var game = new blackjackGame();
+game.initGame([["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck],["JimBob",null,10000,game.deck],["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck]]);
+game.getAIBets();
+
+//In Place Bet button
+//Get player bet
+//Will support multiplayer if we decide to implement
+game.setPlayerBet(num);
+game.getAIBets();
+
+//In Hit button
+game.makeMove('hit'); //or 'stand'
+game.playAITurns();
+
+/*
+getAIBets method:
+iterates through players, checks bet status
+if hasn't bet and is AI, calls the getBet function
+if isn't AI, but players are left, exits
+if checks and finds that all players have bet, calls playAITurns
+
+playAITurns method:
+iterates through players, checks turn status
+if hasn't played and is AI, plays out the AI turn
+if isn't AI and hasn't played, exits
+if checks all and all players have played, calls resolveGame
+
+makeMove method:
+iterates through players, checks turn status
+if not AI and turn status 'inprogress', exit
+
+
+new player attributes:
+this.betPlaced = false;
+this.turnPlayed = false;
+*/
+
+// Tests
 
 for(var i = 0; i < game.players.length; i++)
 {
-	Output(game.players[i].name);
+	console.log(game.players[i].name);
 }
