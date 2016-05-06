@@ -147,7 +147,7 @@
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-						addCard(4,"hearts","player1",0);			
+						clearBoard();			
 				
 					});	
 			
@@ -202,10 +202,21 @@
 					
 							$('#computer4').append(image);
 					}						
-					
-							
-							
+								
 			}
+			
+			function clearBoard(){ //clears the board of all cards
+
+				
+				$('#player').find('img').remove();
+				$('#computer1').find('img').remove();
+				$('#computer2').find('img').remove();
+				$('#computer3').find('img').remove();
+				$('#computer4').find('img').remove();
+			}
+		
+		
+		
 			</script>
  
  </head>
