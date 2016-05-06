@@ -76,4 +76,89 @@ var thePlayer = new function (name, isAI, initialBanked) //jack 11 (10), queen 1
 			return null;
 		}
 	}
+	
+	
+	
+	
+	
+	if(this.name == "Pro")
+	{
+		this.playTurn = function()
+		{
+			var continueTurn = true;
+			var card = "";
+			
+			while(continueTurn)
+			{
+				if(deck.peek().value + endValue < 22)
+				{
+					card = deck.drawCard();
+					this.endValue += card[0];
+					this.cardVals.push(card[0]);
+					this.cardSuites.push(card[1]);
+				}
+				else
+				{
+					continueTurn = false;
+				}
+			}
+		}
+	}
+	else if(this.name == "Noob")
+	{
+		this.playTurn = function()
+		{
+			var continueTurn = true;
+			var card = "";
+			
+			while(continueTurn)
+			{
+				if(deck.peek().value + endValue >= 22)
+				{
+					card = deck.drawCard();
+					this.endValue += card[0];
+					this.cardVals.push(card[0]);
+					this.cardSuites.push(card[1]);
+				}
+				else
+				{
+					continueTurn = false;
+				}
+			}
+		}
+	}
+	else if(this.name == "Dealer Wannabe")
+	{
+		this.playTurn = function()
+		{
+			var card = "";
+		
+			while(this.endValue < 17)
+			{
+				card = deck.drawCard();
+				this.endValue += card[0];
+				this.cardVals.push(card[0]);
+				this.cardSuites.push(card[1]);
+			}
+		}
+	}
+	else if(this.name == "Random Guy")
+	{
+		this.playTurn = function()
+		{
+			var card = "";
+		
+			var continueTurn = Math.floor((Math.random() * 2) + 1); 
+			
+			while(continueTurn == 1)
+			{
+				card = deck.drawCard();
+				this.endValue += card[0];
+				this.cardVals.push(card[0]);
+				this.cardSuites.push(card[1]);
+				
+				continueTurn = Math.floor((Math.random() * 2) + 1); 
+			}
+		}
+	}
 }
