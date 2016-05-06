@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <html>
 
 
@@ -154,7 +156,8 @@
 					$('#Stay').click(function(e){
 						e.preventDefault();
 						
-						addCard(2,"hearts","human",1);						
+						changeMoney(100000,"human","Bob");
+						changeMessage("Hello World!");						
 						
 					});				
 			});
@@ -202,7 +205,9 @@
 					
 							$('#computer4').append(image);
 					}						
-								
+					
+							
+							
 			}
 			
 			function clearBoard(){ //clears the board of all cards
@@ -214,9 +219,58 @@
 				$('#computer3').find('img').remove();
 				$('#computer4').find('img').remove();
 			}
-		
-		
-		
+			
+			function changeMoney(amount,player_id,player_name){
+			
+				//if(player_id == "pot"){player_name = "Pot";}				
+								
+				var value = player_name + ": $" + amount.toString();
+							
+				if(player_id =="pot"){
+				
+					$('#money_pot').empty();					
+					$('#money_pot').append(value);
+				}	
+				
+				else if(player_id == "player1"){
+					
+					$('#money_player1').empty();					
+					$('#money_pot').append(value);
+				}	
+				
+				else if(player_id == "player2"){
+					
+					$('#money_player2').empty();					
+					$('#money_player2').append(value);
+				}	
+				
+				else if(player_id == "player3"){
+					
+					$('#money_player3').empty();					
+					$('#money_player3').append(value);
+				}	
+				
+				else if(player_id == "player4"){
+					
+					$('#money_player4').empty();					
+					$('#money_player4').append(value);
+				}			
+				
+				else if(player_id == "human"){
+					
+					$('#money_human').empty();					
+					$('#money_human').append(value);
+				}		
+					
+			}
+			
+			
+			function changeMessage(message){
+			
+				$('#Message').empty();					
+				$('#Message').append(message);
+			
+			}
 			</script>
  
  </head>
@@ -242,7 +296,7 @@
     		</th>
     		
     		
-    		<th><h2>Hans Brown, Michael Bechtel, Mark Erickson, Alex Griffin<h2/></th>
+    		<th><h2>Hans Brown, Micheal Bechtel, Mark Erickson, Alex Griffin<h2/></th>
   		</tr>	
  	
  	</table>
@@ -255,10 +309,10 @@
     	<col style="width: 33%" />
   		</colgroup> 		
  		
- 		<tr>
-    		<th><h3>Player 1: $100</h3></th>
-    		<th id = "Message"><h4>Messages Displayed here</h4></th>
-    		<th><h3>Player 2: $100</h3></th>
+ 		<tr height ="5">
+    		<th><h3 id="money_player1">Player 1: $100</h3></th>
+    		<th><h4 id = "Message">Messages Displayed here</h4></th>
+    		<th><h3 id="money_player2">Player 2: $100</h3></th>
   		</tr>
  	
  	</table>
@@ -271,9 +325,9 @@
     	<col style="width: 33%" />
   		</colgroup>	
   		
-  		<tr>
+  		<tr height = "115">
     		<th id = "computer1"></th>    		
-    		<th><h3>Pot: $200</h3></th> 
+    		<th><h3 id="money_pot" >Pot: $0</h3></th> 
     		
     		<th id = "computer2"><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105">
     		
@@ -296,8 +350,6 @@
   	
   	</table>
 
-	<br>
-
 	<table border="1" style="width:100%">
  		
 		<colgroup>
@@ -307,9 +359,9 @@
   		</colgroup> 		
  		
  		<tr>
-    		<th><h3>Player 3: $100</h3></th>
+    		<th><h3 id="money_player3">Player 3: $100</h3></th>
     		<th></th>
-    		<th><h3>Player 4: $100</h3></th>
+    		<th><h3 id="money_player4">Player 4: $100</h3></th>
   		</tr>
  	
  	</table>
@@ -323,7 +375,7 @@
     	<col style="width: 45%" />
   		</colgroup> 		
  		
- 		<tr>
+ 		<tr height = "115">
     		<th id ="computer3"><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
     		<th></th>
     		<th id ="computer4"><img src="Cards/ace_of_clubs.png" alt="some_text" width="70" height="105"></th>
@@ -341,7 +393,7 @@
  		
  		<tr>
     		<th></th>
-    		<th><h3>Person: $100</h3></th>
+    		<th><h3 id="money_human">Person: $100</h3></th>
     		<th></th>
   		</tr>
  	
@@ -356,14 +408,21 @@
     	<col style="width: 33%" />
   		</colgroup>  		
  				
-  		<tr>
+  		<tr height ="115">
     		<th>
     			
 				<form>
-					$ <input type="text" name="BetAmount"><br><button type="button" id = "Up">Up</button><button type="button" id = "Down" >Down</button><br>
+					<font size="5">$</font><input type="number" name="BetAmount" id="BetAmount" value="0"><br>
 				</form> 
 				
+				<!--				
+				<button type="button" id = "Down" >-$10</button>
+				<button type="button" id = "Up" >+$10</button>
+				-->
+				
+				
 				<button type="button" id = "BetButton" >Place Bet</button>   			
+    			
     			
     		</th>
     		
