@@ -68,10 +68,10 @@
 						"Cards/card_back.png"
 					];
 		
-		function getCard(num,suite){
+		function getCard(num,suit){
 		
 			if(num == 0){ return cards[52];}
-			else if(suite == "spades"){
+			else if(suit == "spade"){
 				
 				if(num == 1){return cards[39];}
 				else if(num == 2){return cards[40];}	
@@ -89,7 +89,7 @@
 											
 			}
 			
-			else if(suite == "clubs"){
+			else if(suit == "club"){
 			
 				if(num == 1){return cards[0];}
 				else if(num == 2){return cards[1];}	
@@ -107,7 +107,7 @@
 			
 			}
 			
-			else if(suite == "hearts"){
+			else if(suit == "heart"){
 			
 				if(num == 1){return cards[13];}
 				else if(num == 2){return cards[14];}	
@@ -124,7 +124,7 @@
 				else if(num == 13){return cards[25];}			
 			
 			}
-			else if(suite == "diamonds"){
+			else if(suit == "diamond"){
 			
 				if(num == 1){return cards[26];}
 				else if(num == 2){return cards[27];}	
@@ -146,49 +146,63 @@
 		var num = 0;				
  
  		$( document ).ready(function() {		
+					
+					refreshScreen([player1, player2, player3, player4, player5],0,'message',true);
+					
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-						setPlayerName("human","Bob");			
+								
 				
 					});	
 			
-					$('#Stay').click(function(e){
+					$('#Next').click(function(e){
 						e.preventDefault();
 					
-						setPlayerName("human","Sheila");					
+											
 						
-					});				
+					});		
+					
+					
+					//$('#Stay').click(function(e){}
 			});
 			
 			
 			
-			function addCard(num,suite,player,numCard){
+			function addCard(num,suit,player,numCard,showCards){
 			
-					var cardUrl = getCard(num,suite);
+					var cardUrl = getCard(num,suit);
 					
-					var image = ""					
+					var image = "";					
 					
-					if(numCard == 0 ){
+					if(!showCards){
+					
+						if(numCard == 0 ){
+					
+							image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+						}
+						else{
+							image = "<img src='Cards/card_back.png' width='70' height='105' border='2'>";
+						}
+						
+					} else{
 					
 						image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
-					}
-					else{
-						image = "<img src='Cards/card_back.png' width='70' height='105' border='2'>";
-					}
-										
+					}				
 									
 					
-					if(player == "player3"){
+					if(player == "player3"){ //bottom player
 												
-							$('#player').append(image);
-							$('#player').find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
-							$('#player').find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'")
-												
-					}
+							$('#human_player').append(image);
+							
+							if(numCard != 0 && !showCards){
+								$('#human_player').find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
+								$('#human_player').find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
+							}				
+						}
 					else if(player == "player1"){
 					
-							$('#computer1').append(image);
+								$('#computer1').append(image);
 					}
 					else if(player == "player5"){
 					
@@ -201,10 +215,7 @@
 					else if(player == "player4"){
 					
 							$('#computer4').append(image);
-					}						
-					
-							
-							
+					}									
 			}
 			
 			function clearBoard(){ //clears the board of all cards
@@ -249,11 +260,112 @@
 				$('#money-pot').html('Pot: $' + amount.toString());
 			}
 			
-			function refreshScreen(playerArray,pot,message=""){
+//////////////////////////////////////////////////////////////////////////////////////////////////////						
 			
+			
+var player1 = 
+{
+ name: "Noob",
+ bet: 400,
+ busted: false,
+ cards: [
+   {
+     suit: 'heart',
+     value: 4 //1 is ace, 11 is jack, etc 
+   },
+   {
+     suit: 'heart',
+     value: 8
+   }
+ ]
+};
+
+var player2 = 
+{
+ name: "Noob",
+ bet: 400,
+ busted: false,
+ cards: [
+   {
+     suit: 'spade',
+     value: 7 //1 is ace, 11 is jack, etc 
+   },
+   {
+     suit: 'diamond',
+     value: 13
+   }
+ ]
+};
+var player3 = 
+{
+ name: "Noob",
+ bet: 400,
+ busted: false,
+ cards: [
+   {
+     suit: 'spade',
+     value: 7 //1 is ace, 11 is jack, etc 
+   },
+   {
+     suit: 'diamond',
+     value: 13
+   },
+   {
+     suit: 'spade',
+     value: 12
+   }
+ ]
+};
+var player4 = 
+{
+ name: "Noob",
+ bet: 400,
+ busted: false,
+ cards: [
+   {
+     suit: 'spade',
+     value: 7 //1 is ace, 11 is jack, etc 
+   },
+   {
+     suit: 'diamond',
+     value: 13
+   },
+   {
+     suit: 'diamond',
+     value: 13
+   }
+ ]
+};
+var player5 = 
+{
+ name: "Noob",
+ bet: 400,
+ busted: false,
+ cards: [
+   {
+     suit: 'spade',
+     value: 7 //1 is ace, 11 is jack, etc 
+   },
+   {
+     suit: 'diamond',
+     value: 13
+   }
+ ]
+};
+
+		
+		
+			
+			
+			
+//////////////////////////////////////////////////////////////////////////////////////////////////////			
+			function refreshScreen(playerArray,pot,console_message,showCards){
+			
+				if(typeof console_message === 'undefined' || console_message==null){changeMessage("");}
+				else{changeMessage(console_message);}				
+				
 				clearBoard();
 				
-				changeMessage(message);
 				changePot(pot);
 				
 				for(var i =0;i<5;i++){
@@ -266,14 +378,14 @@
 					
 					for(var j=0; j<playerArray[i].cards.length;j++){
 					
-						addCard(playerArray[i].cards[j].value , playerArray[i].cards[j].suite , player_id,j)
+						addCard(playerArray[i].cards[j].value , playerArray[i].cards[j].suit , player_id,j,showCards)
 					
 					}				
 					
 				}
 			
 			}
-
+			
 			
 			</script>
  
@@ -381,7 +493,7 @@
  		
  		<tr>
     		<th></th>
-    		<th id="money_human"><h3><span class="name">Bob</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
+    		<th id="money_player3"><h3><span class="name">Bob</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th></th>
   		</tr>
  	
@@ -408,11 +520,12 @@
     			
     		</th>
     		
-    		<th id = "player"></th> 
+    		<th id = "human_player"></th> 
     		
     		<th>
     			<button type="button" id = "HitMe" >Hit Me</button>
-				<button type="button" id = "Stay" >Stay</button>
+    			<br><br>
+				<button type="button" id = "Next" >Next</button>
 			</th>
   		</tr>
  	
