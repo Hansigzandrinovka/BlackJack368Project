@@ -165,9 +165,7 @@
 			
 			function addCard(num,suite,player,numCard){
 			
-					var cardUrl = getCard(num,suite);									
-					
-					var identity = player + numCard.toString();	
+					var cardUrl = getCard(num,suite);
 					
 					var image = ""					
 					
@@ -181,7 +179,7 @@
 										
 									
 					
-					if(player == "human"){
+					if(player == "player3"){
 												
 							$('#player').append(image);
 							$('#player').find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
@@ -192,11 +190,11 @@
 					
 							$('#computer1').append(image);
 					}
-					else if(player == "player2"){
+					else if(player == "player5"){
 					
 							$('#computer2').append(image);
 					}	
-					else if(player == "player3"){
+					else if(player == "player2"){
 					
 							$('#computer3').append(image);
 					}	
@@ -241,9 +239,8 @@
 			}			
 			
 			function changeMessage(message){
-			
-				$('#Message').empty();					
-				$('#Message').append(message);
+					
+				$('#Message').html(message);
 			
 			}
 			
@@ -252,6 +249,31 @@
 				$('#money-pot').html('Pot: $' + amount.toString());
 			}
 			
+			function refreshScreen(playerArray,pot,message=""){
+			
+				clearBoard();
+				
+				changeMessage(message);
+				changePot(pot);
+				
+				for(var i =0;i<5;i++){
+					
+					var player_id = "player" + (i+1).toString();
+											
+					changeMoney(player_id,playerArray[i].bet);
+					setPlayerName(player_id,playerArray[i].name);
+					setBusted(player_id,playerArray[i].busted);	
+					
+					for(var j=0; j<playerArray[i].cards.length;j++){
+					
+						addCard(playerArray[i].cards[j].value , playerArray[i].cards[j].suite , player_id,j)
+					
+					}				
+					
+				}
+			
+			}
+
 			
 			</script>
  
@@ -294,7 +316,7 @@
  		<tr>
     		<th id="money_player1"><h3><span class="name">Player 1</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th><h4 id = "Message">Messages Displayed here</h4></th>
-    		<th id="money_player2"><h3><span class="name">Player 2</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
+    		<th id="money_player5"><h3><span class="name">Player 2</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
   		</tr>
  	
  	</table>
@@ -341,7 +363,7 @@
   		</colgroup> 		
  		
  		<tr>
-    		<th id="money_player3"><h3><span class="name">Player 3</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
+    		<th id="money_player2"><h3><span class="name">Player 2</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th></th>
     		<th id="money_player4"><h3><span class="name">Player 4</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
   		</tr>
