@@ -149,15 +149,14 @@
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-						clearBoard();			
+						setPlayerName("human","Bob");			
 				
 					});	
 			
 					$('#Stay').click(function(e){
 						e.preventDefault();
-						
-						changeMoney(100000,"human","Bob");
-						changeMessage("Hello World!");						
+					
+						setPlayerName("human","Sheila");					
 						
 					});				
 			});
@@ -220,50 +219,26 @@
 				$('#computer4').find('img').remove();
 			}
 			
-			function changeMoney(amount,player_id,player_name){
+			function changeMoney(player_id,amount){
 			
-				//if(player_id == "pot"){player_name = "Pot";}				
-								
-				var value = player_name + ": $" + amount.toString();
-							
-				if(player_id =="pot"){
-				
-					$('#money_pot').empty();					
-					$('#money_pot').append(value);
-				}	
-				
-				else if(player_id == "player1"){
-					
-					$('#money_player1').empty();					
-					$('#money_pot').append(value);
-				}	
-				
-				else if(player_id == "player2"){
-					
-					$('#money_player2').empty();					
-					$('#money_player2').append(value);
-				}	
-				
-				else if(player_id == "player3"){
-					
-					$('#money_player3').empty();					
-					$('#money_player3').append(value);
-				}	
-				
-				else if(player_id == "player4"){
-					
-					$('#money_player4').empty();					
-					$('#money_player4').append(value);
-				}			
-				
-				else if(player_id == "human"){
-					
-					$('#money_human').empty();					
-					$('#money_human').append(value);
-				}		
-					
+				$('#money_'+player_id).find('span.money').html(": $" + amount.toString());
 			}
 			
+			function setPlayerName(player_id,player_name){
+			
+				$('#money_'+player_id).find('span.name').html(player_name);
+			}			
+			
+			function setBusted(player_id,isThePlayerBusted){
+			
+				if(isThePlayerBusted){
+				
+					$('#money_'+player_id).find('span.busted').html("  Busted!");	
+				}
+				else{
+					$('#money_'+player_id).find('span.busted').html("");
+				}			
+			}			
 			
 			function changeMessage(message){
 			
@@ -271,6 +246,8 @@
 				$('#Message').append(message);
 			
 			}
+			
+			
 			</script>
  
  </head>
@@ -310,9 +287,9 @@
   		</colgroup> 		
  		
  		<tr height ="5">
-    		<th><h3 id="money_player1">Player 1: $100</h3></th>
+    		<th id="money_player1"><h3><span class="name">Player 1</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th><h4 id = "Message">Messages Displayed here</h4></th>
-    		<th><h3 id="money_player2">Player 2: $100</h3></th>
+    		<th id="money_player2"><h3><span class="name">Player 2</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
   		</tr>
  	
  	</table>
@@ -359,9 +336,9 @@
   		</colgroup> 		
  		
  		<tr>
-    		<th><h3 id="money_player3">Player 3: $100</h3></th>
+    		<th id="money_player3"><h3><span class="name">Player 3</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th></th>
-    		<th><h3 id="money_player4">Player 4: $100</h3></th>
+    		<th id="money_player4"><h3><span class="name">Player 4</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
   		</tr>
  	
  	</table>
@@ -393,7 +370,7 @@
  		
  		<tr>
     		<th></th>
-    		<th><h3 id="money_human">Person: $100</h3></th>
+    		<th id="money_human"><h3><span class="name">Bob</span><span class="money">: $100<span class="busted" style="color:red"></span></h3></th>
     		<th></th>
   		</tr>
  	
