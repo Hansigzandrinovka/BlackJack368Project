@@ -89,6 +89,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	var secondDrawnCard = theDeck.drawCard(1);
 	this.name = name; //player name will determined by the html component of gui
 	this.isAI = isAI;
+	this.busted = false;
 	this.cardVals = [firstDrawnCard.value, secondDrawnCard.value]; //stores the values on the list
 	this.cardSuites = [firstDrawnCard.suite,secondDrawnCard.suite];
 	this.endValue = this.cardVals[0] + this.cardVals[1];
@@ -157,7 +158,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			
 			while(continueTurn)
 			{
-				if(theDeck.lookAtCard().value + endValue < 22)
+				if(endValue >= 22)
+				{
+					continueTurn = false;
+					this.busted = true;
+				}
+				else if(theDeck.lookAtCard().value + endValue < 22)
 				{
 					card = theDeck.drawCard(1);
 					this.endValue += card.value;
@@ -180,7 +186,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			
 			while(continueTurn)
 			{
-				if(theDeck.lookAtCard().value + endValue >= 22)
+				if(endValue >= 22)
+				{
+					continueTurn = false;
+					this.busted = true;
+				}
+				else if(theDeck.lookAtCard().value + endValue >= 22)
 				{
 					card = theDeck.drawCard(1);
 					this.endValue += card.value;
@@ -207,6 +218,11 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 				this.cardVals.push(card.value);
 				this.cardSuites.push(card.suite);
 			}
+			
+			if(endValue >= 22)
+			{
+				this.busted = true;
+			}
 		}
 	}
 	else if(this.isAI == "Random Guy")
@@ -224,7 +240,13 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 				this.cardVals.push(card.value);
 				this.cardSuites.push(card.suite);
 				
-				continueTurn = Math.floor((Math.random() * 2) + 1); 
+				continueTurn = Math.floor((Math.random() * 2) + 1);
+				
+				if(endValue >= 22)
+				{
+					continueTurn = 2;
+					this.busted = true;
+				}
 			}
 		}
 	}
