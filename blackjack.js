@@ -166,7 +166,8 @@ $( document ).ready(function() {
       });
 
       $('#nameButton').click(function(e){
-        e.preventDefault();
+      	
+        	e.preventDefault();
 
    		$('h3').css('visibility', 'visible');
 
@@ -185,7 +186,6 @@ $( document ).ready(function() {
       });
 
 
-      //$('#Stay').click(function(e){}
   });
 
 
