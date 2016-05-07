@@ -203,6 +203,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 {
 	var theDeck = deckObject;
 
+	this.bet = 0; //tracks the amount player has bet
 	if(name == "HeavyRain") //easter egg
 	{
 		this.name = "Shawn! SHAAAAAAAAAAAAAWN!";
@@ -217,7 +218,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	} //player name will determined by the html component of gui
 
 
-	this.isAI = isAI;
+	this.isAI = isAI; //null for not AI
 	this.busted = false; // track if player over 21 or not
 	this.cardVals = []; //stores the values on the list
 	this.cardSuites = [];
@@ -232,6 +233,21 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	else
 	{
 		this.banked = 100;
+	}
+
+	this.GetBet = function() //returns bet amount that player set, 0ing it, deducting it from their bank
+	{
+		if(this.bet > this.banked) //player bets too much
+		{
+			this.bet = this.banked;
+			this.banked = 0;
+			return this.bet;
+		}
+		else
+		{
+			this.banked -= tis.bet;
+			return this.bet;
+		}
 	}
 
 	//output: numerical sum of point values for each card in player's hand (found through logic applied to cards)
@@ -292,19 +308,16 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		return this.cards;
 	};
 
-	//output: True/False to "has the user run out of cards?"
-	//if one exists, removes the first card from the player's hand, this would be a clean-up method
-	this.removeFirstCard = function() //returns false when it removed a card
+	//output: The card at the top of the user's hand, or null if no card
+	//if one exists, removes the first card from the player's hand and return it, this would be a clean-up method
+	this.TakeFirstCard = function() //returns null when no card in deck
 	{
+		var theCard = null;
 		if(this.cards.length > 0)
 		{
-			this.cards.pop();
-			return false;
+			theCard = this.cards.pop();
 		}
-		else //otw, user all out of cards
-		{
-			return true;
-		}
+		return theCard;
 	};
 
 	this.getPlayerHandValues = function() //to be deleted
@@ -314,6 +327,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	this.getPlayerHandSuites = function() //to be deleted
 	{
 		return this.cardSuites;
+	};
+
+	this.reset = function() //destroy card array, reset bet to 0
+	{
+		this.bet = 0;
+		this.cards = []; //Does NOT check if cards still in hand to return to deck
 	};
 
 	//input: an index to poll
