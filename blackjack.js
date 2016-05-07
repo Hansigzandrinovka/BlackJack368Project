@@ -467,12 +467,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     }
   };
 
-  this.getActivePlayer = function(type){
-    if(type = 'bet'){
-
-    } else if(type = '')
-  }
-
   this.getAIBets = function(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
