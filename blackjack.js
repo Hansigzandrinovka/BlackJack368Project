@@ -136,6 +136,9 @@ var num = 0;
 $( document ).ready(function() {
 
       startScreen();
+      var game = new blackjackGame();
+      
+      
 
       $('#HitMe').click(function(e){
         e.preventDefault();
@@ -148,6 +151,24 @@ $( document ).ready(function() {
         e.preventDefault();
 
         setButtons("bet");
+
+      });
+      
+      $('#nameButton').click(function(e){
+        e.preventDefault();
+
+   		$('h3').css('visibility', 'visible');
+   		
+   		$('#nameInputLine').css('visibility', 'hidden');
+   		      	
+	        			
+			var players = [["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck],["JimBob",null,10000,game.deck],["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck]];
+			
+			game.initGame(players);
+			
+			refreshScreen(players,0,'Welcome To BlackJack!',false,"none");
+			
+			game.getAIBets();
 
       });
 
@@ -643,7 +664,7 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     }
   };
 
-  refreshScreen(players, pot, message = "", showAllCards = true)
+  
 }
 
 function Deck(){
