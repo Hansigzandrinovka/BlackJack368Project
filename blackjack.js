@@ -175,7 +175,7 @@ $( document ).ready(function() {
    		$('#nameInputLine').css('visibility', 'hidden');
    		      	
 	      
-			var player_name = getPlayerName()	      
+			var player_name = getPlayerName();	      
 	        			
 			var players = [["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck],[player_name,null,10000,game.deck],["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck]];
 			
