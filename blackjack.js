@@ -1,6 +1,7 @@
 function blackjackGame(){ //game gets initialized when you create a blackjack game
   this.deck = new Deck();
   this.players = [];
+  this.refreshDelay = 2000;
 
   this.initGame = function(playerDefs){
     //playerDefs example: [[name,type,initialBanked],[name,type,initialBanked], etc]
@@ -33,13 +34,13 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
-    this.refreshScreen(this.players, this.pot, "Let's begin.");
+    setTimeout(this.refreshScreen(this.players, this.pot, "Let's begin."),this.refreshDelay);
   };
 
   this.dealCards = function(){ //at start of game, give each player 2 cards
     for(var i=0; i<this.players.length; i++){
       this.players[i].addCards(this.deck.drawCards(2));
-      this.refreshScreen(this.players);
+      setTimeout(this.refreshScreen(this.players),this.refreshDelay);
     }
   };
 
@@ -48,6 +49,94 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       this.players[i].reset();  //each player needs a reset method that empties out player hand and resets bet stat to 0
     }
   };
+
+  this.getActivePlayer = function(type){
+    if(type = 'bet'){
+
+    } else if(type = '')
+  }
+
+  this.getAIBets = function(){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && !this.players[i].betPlaced){
+        break;
+      } else if(this.players[i].isAI && !this.players[i].betPlaced){
+        this.pot += this.players[i].getBet();
+        this.players[i].betPlaced = true;
+        setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+      }
+    }
+    this.refreshScreen(this.players, this.pot, "", true, 'play');
+    this.playAITurns();
+  }
+
+  this.setPlayerBet = function(bet){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && !this.players[i].betPlaced){
+        this.pot += bet;
+        this.players[i].decreasePlayerMoney(bet); //not sure what Hans' method is
+        this.players[i].betPlaced = true;
+        setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        break;
+      }
+    }
+  }
+
+  this.playAITurns = function(){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && this.players[i].turnPlayed === "false"){
+        this.players[i].turnPlayed = "inprogress"
+        break;
+      } else if(this.players[i].isAI && this.players[i].turnPlayed === "false"){
+        var move = [];
+        while(this.players[i].busted === false && this.players[i].turnPlayed === "inprogress"){
+          move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
+          if(move == 'stand'){ //player waits for round to end
+            this.players[i].turnPlayed = "finished";
+
+          }
+          else if(move == 'hit'){ //player gets another card
+            this.players[i].addCards(this.deck.drawCards(1));
+            var amount = this.players[i].getTotalAmount();
+            if(amount > 21){
+              this.players[i].busted = true;
+              this.players[i].turnPlayed = "finished";
+            }
+          }
+          setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        }
+      }
+    }
+    this.refreshScreen(this.players, this.pot, "", true, 'none');
+    this.resolveGame();
+  }
+
+  this.makeMove = function(move){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && this.players[i].turnPlayed === "inprogress"){
+        if(move == 'stand'){ //player waits for round to end
+          this.players[i].turnPlayed = "finished";
+        }
+        else if(move == 'hit'){ //player gets another card
+          this.players[i].addCards(this.deck.drawCards(1));
+          var amount = this.players[i].getTotalAmount();
+          if(amount > 21){
+            this.players[i].busted = true;
+            this.players[i].turnPlayed = "finished";
+          }
+        }
+
+        if(this.players[i].turnPlayed === "finished"){
+          setTimeout(this.refreshScreen(this.players),this.refreshDelay);
+          this.playAITurns();
+        }
+        break;
+      }
+
+    }
+    this.refreshScreen(this.players, this.pot, "", true, 'none');
+    this.resolveGame();
+  }
 
   // this.getBets = function(){ //polls all players for the amount they want to bet for this game, taking the money from the players
   //   var bet = 0;
@@ -80,24 +169,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   //     }
   //   }
   // };
-
-  this.makeMove = function(move, player){
-    if(move == 'stand'){ //player waits for round to end
-      this.players[i].myTurn = false;
-    }
-    else if(move == 'hit'){ //player gets another card
-      this.players[i].addCards(this.deck.drawCards(1));
-      var amount = this.players[i].getTotalAmount();
-      if(amount > 21){
-        this.players[i].busted = true;
-        this.players[i].myTurn = false;
-      }
-    }
-    else {
-      //do nothing for now
-    }
-    this.refreshScreen(this.players);
-  }
 
   this.getWinners = function(){ //checks who is not busted, and determines who won
     var winners = [];
@@ -141,7 +212,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   };
 
   this.refreshScreen = function(players, pot, message = "", showAllCards = true){ //presumably clears the screen, then updates it with new information
-    setTimeout(function(){},2000); //maybe?
     //Call's to Alex's functions here
   };
 }
@@ -165,13 +235,13 @@ function Deck(){
 
   this.drawCards = function(num){
     var top = this.active.splice(0,num);
-    
+
     if(this.active.length < 52)
     {
     	this.active.concat(this.discards);
     	this.shuffle();
     }
-    
+
     return top;
   };
 
@@ -548,7 +618,6 @@ if all players marked 'finished', call resolveGame
 for first player with turn status 'inprogress', apply move, check if busted, mark accordingly. mark turn status 'finished' if busted, or if player stands
 if turn status current player is 'inprogress', exit
 if turn status current player just marked 'finished', call playAITurns
-
 
 new player attributes (defaults followed by possible values):
 this.betPlaced = false; //false or true
