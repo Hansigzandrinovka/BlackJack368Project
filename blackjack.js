@@ -143,8 +143,8 @@ $( document ).ready(function() {
 
       $('#HitMe').click(function(e){
         e.preventDefault();
-
-        refreshScreen([player1, player2, player3, player4, player5],0,'message',true,"none");
+        game.makeMove('hit'); //or 'stand'
+		  game.playAITurns();
 
       });
 
@@ -152,6 +152,16 @@ $( document ).ready(function() {
         e.preventDefault();
 
         setButtons("bet");
+
+      });
+      
+
+       $('#BetButton').click(function(e){
+        e.preventDefault();
+
+
+		  game.setPlayerBet(num);
+		  game.getAIBets();
 
       });
 
@@ -168,6 +178,12 @@ $( document ).ready(function() {
 			game.initGame(players);
 
 			refreshScreen(game.players,0,'Welcome To BlackJack!',false,"none");
+
+			var player_name = getPlayerName()
+
+			game.initGame(players);
+
+			refreshScreen(game.players,0,player_name,false,"none");
 
 			game.getAIBets();
 
@@ -327,6 +343,23 @@ $( document ).ready(function() {
 		};
   		refreshScreen([playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty],0,'',false,"start");
   }
+
+
+	function getPlayerBet(){
+
+  		var bet = $('#BetAmount').val();
+  		$('#BetAmount').val(0);
+
+  		return bet;
+	}
+
+	function getPlayerName(){
+
+		var player_name = $('#nameInput').val();
+  		$('#nameInput').val("");
+
+  		return player_name;
+	}
 
   function refreshScreen(playerArray,pot,console_message,showCards,buttonsToShow){
 
