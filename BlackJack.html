@@ -147,19 +147,19 @@
  
  		$( document ).ready(function() {		
 					
-					refreshScreen([player1, player2, player3, player4, player5],0,'message',true);
+					refreshScreen([player1, player2, player3, player4, player5],0,'message',false,"play");
 					
 					$('#HitMe').click(function(e){
 						e.preventDefault();
 								
-								
+						refreshScreen([player1, player2, player3, player4, player5],0,'message',true,"none");		
 				
 					});	
 			
-					$('#Next').click(function(e){
+					$('#Stay').click(function(e){
 						e.preventDefault();
 					
-											
+						setButtons("bet");					
 						
 					});		
 					
@@ -221,7 +221,7 @@
 			function clearBoard(){ //clears the board of all cards
 
 				
-				$('#player').find('img').remove();
+				$('#human_player').find('img').remove();
 				$('#computer1').find('img').remove();
 				$('#computer2').find('img').remove();
 				$('#computer3').find('img').remove();
@@ -258,6 +258,43 @@
 			function changePot(amount){
 			
 				$('#money-pot').html('Pot: $' + amount.toString());
+			}
+			
+			function setButtons(whatToShow){
+			
+				if(whatToShow == "bet"){
+				
+					$('#HitMe').css('visibility', 'hidden');
+					$('#Stay').css('visibility', 'hidden');	
+									
+					$('#BetButton').css('visibility', 'visible');
+					$('#dollarSign').css('visibility', 'visible');
+					$('#BetAmount').css('visibility', 'visible');
+					
+				}
+				else if(whatToShow == "play"){
+				
+					$('#BetAmount').css('visibility', 'hidden');					
+					$('#BetButton').css('visibility', 'hidden');
+					$('#dollarSign').css('visibility', 'hidden');	
+									
+					$('#HitMe').css('visibility', 'visible');
+					$('#Stay').css('visibility', 'visible');
+				}
+				else if(whatToShow == "none"){
+				
+					$('button').css('visibility', 'hidden');
+					$('#dollarSign').css('visibility', 'hidden');
+					$('#BetAmount').css('visibility', 'hidden');
+				}
+				else if(whatToShow == "all"){
+				
+					$('button').css('visibility', 'visible');
+					$('#dollarSign').css('visibility', 'visible');
+					$('#BetAmount').css('visibility', 'visible');
+				}
+			
+			
 			}
 			
 //////////////////////////////////////////////////////////////////////////////////////////////////////						
@@ -318,7 +355,7 @@ var player3 =
 };
 var player4 = 
 {
- name: "Noob",
+ name: "Bob",
  bet: 400,
  busted: false,
  cards: [
@@ -359,7 +396,7 @@ var player5 =
 			
 			
 //////////////////////////////////////////////////////////////////////////////////////////////////////			
-			function refreshScreen(playerArray,pot,console_message,showCards){
+			function refreshScreen(playerArray,pot,console_message,showCards,buttonsToShow){
 			
 				if(typeof console_message === 'undefined' || console_message==null){changeMessage("");}
 				else{changeMessage(console_message);}				
@@ -367,6 +404,8 @@ var player5 =
 				clearBoard();
 				
 				changePot(pot);
+				
+				setButtons(buttonsToShow);
 				
 				for(var i =0;i<5;i++){
 					
@@ -512,7 +551,7 @@ var player5 =
     		<th>
     			
 				<form>
-					<font size="6">$</font><input type="number" name="BetAmount" id="BetAmount" value="0"><br>
+					<span id = "dollarSign"><font size="6">$</font></span><input type="number" name="BetAmount" id="BetAmount" value="0"><br>
 				</form> 				
 				
 				<button type="button" id = "BetButton">Place Bet</button>   			
@@ -525,7 +564,7 @@ var player5 =
     		<th>
     			<button type="button" id = "HitMe" >Hit Me</button>
     			<br><br>
-				<button type="button" id = "Next" >Next</button>
+				<button type="button" id = "Stay" >Stay</button>
 			</th>
   		</tr>
  	
