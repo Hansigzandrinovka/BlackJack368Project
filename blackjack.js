@@ -1,3 +1,420 @@
+////// Interface code
+
+var cards = [
+        "Cards/ace_of_clubs.png",
+        "Cards/2_of_clubs.png",
+        "Cards/3_of_clubs.png",
+        "Cards/4_of_clubs.png",
+        "Cards/5_of_clubs.png",
+        "Cards/6_of_clubs.png",
+        "Cards/7_of_clubs.png",
+        "Cards/8_of_clubs.png",
+        "Cards/9_of_clubs.png",
+        "Cards/10_of_clubs.png",
+        "Cards/jack_of_clubs.png",
+        "Cards/queen_of_clubs.png",
+        "Cards/king_of_clubs.png",
+        "Cards/ace_of_hearts.png",
+        "Cards/2_of_hearts.png",
+        "Cards/3_of_hearts.png",
+        "Cards/4_of_hearts.png",
+        "Cards/5_of_hearts.png",
+        "Cards/6_of_hearts.png",
+        "Cards/7_of_hearts.png",
+        "Cards/8_of_hearts.png",
+        "Cards/9_of_hearts.png",
+        "Cards/10_of_hearts.png",
+        "Cards/jack_of_hearts.png",
+        "Cards/queen_of_hearts.png",
+        "Cards/king_of_hearts.png",
+        "Cards/ace_of_diamonds.png",
+        "Cards/2_of_diamonds.png",
+        "Cards/3_of_diamonds.png",
+        "Cards/4_of_diamonds.png",
+        "Cards/5_of_diamonds.png",
+        "Cards/6_of_diamonds.png",
+        "Cards/7_of_diamonds.png",
+        "Cards/8_of_diamonds.png",
+        "Cards/9_of_diamonds.png",
+        "Cards/9_of_diamonds.png",
+        "Cards/jack_of_diamonds.png",
+        "Cards/queen_of_diamonds.png",
+        "Cards/king_of_diamonds.png",
+        "Cards/ace_of_spades.png",
+        "Cards/2_of_spades.png",
+        "Cards/3_of_spades.png",
+        "Cards/4_of_spades.png",
+        "Cards/5_of_spades.png",
+        "Cards/6_of_spades.png",
+        "Cards/7_of_spades.png",
+        "Cards/8_of_spades.png",
+        "Cards/9_of_spades.png",
+        "Cards/10_of_spades.png",
+        "Cards/jack_of_spades.png",
+        "Cards/queen_of_spades.png",
+        "Cards/king_of_spades.png",
+        "Cards/card_back.png"
+      ];
+
+function getCard(num,suit){
+
+  if(num == 0){ return cards[52];}
+  else if(suit == "spade"){
+
+    if(num == 1){return cards[39];}
+    else if(num == 2){return cards[40];}
+    else if(num == 3){return cards[41];}
+    else if(num == 4){return cards[42];}
+    else if(num == 5){return cards[43];}
+    else if(num == 6){return cards[44];}
+    else if(num == 7){return cards[45];}
+    else if(num == 8){return cards[46];}
+    else if(num == 9){return cards[47];}
+    else if(num == 10){return cards[48];}
+    else if(num == 11){return cards[49];}
+    else if(num == 12){return cards[50];}
+    else if(num == 13){return cards[51];}
+
+  }
+
+  else if(suit == "club"){
+
+    if(num == 1){return cards[0];}
+    else if(num == 2){return cards[1];}
+    else if(num == 3){return cards[2];}
+    else if(num == 4){return cards[3];}
+    else if(num == 5){return cards[4];}
+    else if(num == 6){return cards[5];}
+    else if(num == 7){return cards[6];}
+    else if(num == 8){return cards[7];}
+    else if(num == 9){return cards[8];}
+    else if(num == 10){return cards[9];}
+    else if(num == 11){return cards[10];}
+    else if(num == 12){return cards[11];}
+    else if(num == 13){return cards[12];}
+
+  }
+
+  else if(suit == "heart"){
+
+    if(num == 1){return cards[13];}
+    else if(num == 2){return cards[14];}
+    else if(num == 3){return cards[15];}
+    else if(num == 4){return cards[16];}
+    else if(num == 5){return cards[17];}
+    else if(num == 6){return cards[18];}
+    else if(num == 7){return cards[19];}
+    else if(num == 8){return cards[20];}
+    else if(num == 9){return cards[21];}
+    else if(num == 10){return cards[22];}
+    else if(num == 11){return cards[23];}
+    else if(num == 12){return cards[24];}
+    else if(num == 13){return cards[25];}
+
+  }
+  else if(suit == "diamond"){
+
+    if(num == 1){return cards[26];}
+    else if(num == 2){return cards[27];}
+    else if(num == 3){return cards[28];}
+    else if(num == 4){return cards[29];}
+    else if(num == 5){return cards[30];}
+    else if(num == 6){return cards[31];}
+    else if(num == 7){return cards[32];}
+    else if(num == 8){return cards[33];}
+    else if(num == 9){return cards[34];}
+    else if(num == 10){return cards[35];}
+    else if(num == 11){return cards[36];}
+    else if(num == 12){return cards[37];}
+    else if(num == 13){return cards[38];}
+
+  }
+}
+
+var num = 0;
+
+$( document ).ready(function() {
+
+      refreshScreen([player1, player2, player3, player4, player5],0,'message',false,"play");
+
+      $('#HitMe').click(function(e){
+        e.preventDefault();
+
+        refreshScreen([player1, player2, player3, player4, player5],0,'message',true,"none");
+
+      });
+
+      $('#Stay').click(function(e){
+        e.preventDefault();
+
+        setButtons("bet");
+
+      });
+
+
+      //$('#Stay').click(function(e){}
+  });
+
+
+
+  function addCard(num,suit,player,numCard,showCards){
+
+      var cardUrl = getCard(num,suit);
+
+      var image = "";
+
+      if(!showCards){
+
+        if(numCard == 0 ){
+
+          image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+        }
+        else{
+          image = "<img src='Cards/card_back.png' width='70' height='105' border='2'>";
+        }
+
+      } else{
+
+        image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+      }
+
+
+      if(player == "player3"){ //bottom player
+
+          $('#human_player').append(image);
+
+          if(numCard != 0 && !showCards){
+            $('#human_player').find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
+            $('#human_player').find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
+          }
+        }
+      else if(player == "player1"){
+
+            $('#computer1').append(image);
+      }
+      else if(player == "player5"){
+
+          $('#computer2').append(image);
+      }
+      else if(player == "player2"){
+
+          $('#computer3').append(image);
+      }
+      else if(player == "player4"){
+
+          $('#computer4').append(image);
+      }
+  }
+
+  function clearBoard(){ //clears the board of all cards
+
+
+    $('#human_player').find('img').remove();
+    $('#computer1').find('img').remove();
+    $('#computer2').find('img').remove();
+    $('#computer3').find('img').remove();
+    $('#computer4').find('img').remove();
+  }
+
+  function changeMoney(player_id,amount){
+
+    $('#money_'+player_id).find('span.money').html(": $" + amount.toString());
+  }
+
+  function setPlayerName(player_id,player_name){
+
+    $('#money_'+player_id).find('span.name').html(player_name);
+  }
+
+  function setBusted(player_id,isThePlayerBusted){
+
+    if(isThePlayerBusted){
+
+      $('#money_'+player_id).find('span.busted').html("  Busted!");
+    }
+    else{
+      $('#money_'+player_id).find('span.busted').html("");
+    }
+  }
+
+  function changeMessage(message){
+
+    $('#Message').html(message);
+
+  }
+
+  function changePot(amount){
+
+    $('#money-pot').html('Pot: $' + amount.toString());
+  }
+
+  function setButtons(whatToShow){
+
+    if(whatToShow == "bet"){
+
+      $('#HitMe').css('visibility', 'hidden');
+      $('#Stay').css('visibility', 'hidden');
+
+      $('#BetButton').css('visibility', 'visible');
+      $('#dollarSign').css('visibility', 'visible');
+      $('#BetAmount').css('visibility', 'visible');
+
+    }
+    else if(whatToShow == "play"){
+
+      $('#BetAmount').css('visibility', 'hidden');
+      $('#BetButton').css('visibility', 'hidden');
+      $('#dollarSign').css('visibility', 'hidden');
+
+      $('#HitMe').css('visibility', 'visible');
+      $('#Stay').css('visibility', 'visible');
+    }
+    else if(whatToShow == "none"){
+
+      $('button').css('visibility', 'hidden');
+      $('#dollarSign').css('visibility', 'hidden');
+      $('#BetAmount').css('visibility', 'hidden');
+    }
+    else if(whatToShow == "all"){
+
+      $('button').css('visibility', 'visible');
+      $('#dollarSign').css('visibility', 'visible');
+      $('#BetAmount').css('visibility', 'visible');
+    }
+
+
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+var player1 =
+{
+name: "Noob",
+bet: 400,
+busted: false,
+cards: [
+{
+ suit: 'heart',
+ value: 4 //1 is ace, 11 is jack, etc
+},
+{
+ suit: 'heart',
+ value: 8
+}
+]
+};
+
+var player2 =
+{
+name: "Noob",
+bet: 400,
+busted: false,
+cards: [
+{
+ suit: 'spade',
+ value: 7 //1 is ace, 11 is jack, etc
+},
+{
+ suit: 'diamond',
+ value: 13
+}
+]
+};
+var player3 =
+{
+name: "Noob",
+bet: 400,
+busted: false,
+cards: [
+{
+ suit: 'spade',
+ value: 7 //1 is ace, 11 is jack, etc
+},
+{
+ suit: 'diamond',
+ value: 13
+},
+{
+ suit: 'spade',
+ value: 12
+}
+]
+};
+var player4 =
+{
+name: "Bob",
+bet: 400,
+busted: false,
+cards: [
+{
+ suit: 'spade',
+ value: 7 //1 is ace, 11 is jack, etc
+},
+{
+ suit: 'diamond',
+ value: 13
+},
+{
+ suit: 'diamond',
+ value: 13
+}
+]
+};
+var player5 =
+{
+name: "Noob",
+bet: 400,
+busted: false,
+cards: [
+{
+ suit: 'spade',
+ value: 7 //1 is ace, 11 is jack, etc
+},
+{
+ suit: 'diamond',
+ value: 13
+}
+]
+};
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+  function refreshScreen(playerArray,pot,console_message,showCards,buttonsToShow){
+
+    if(typeof console_message === 'undefined' || console_message==null){changeMessage("");}
+    else{changeMessage(console_message);}
+
+    clearBoard();
+
+    changePot(pot);
+
+    setButtons(buttonsToShow);
+
+    for(var i =0;i<5;i++){
+
+      var player_id = "player" + (i+1).toString();
+
+      changeMoney(player_id,playerArray[i].bet);
+      setPlayerName(player_id,playerArray[i].name);
+      setBusted(player_id,playerArray[i].busted);
+
+      for(var j=0; j<playerArray[i].cards.length;j++){
+
+        addCard(playerArray[i].cards[j].value , playerArray[i].cards[j].suit , player_id,j,showCards)
+
+      }
+
+    }
+
+  }
+
+////// Game logic
+
 function blackjackGame(){ //game gets initialized when you create a blackjack game
   this.deck = new Deck();
   this.players = [];
@@ -582,6 +999,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	}
 }
 
+/*
 //// In 'Start Game' button
 // get player name
 
@@ -622,7 +1040,7 @@ if turn status current player just marked 'finished', call playAITurns
 new player attributes (defaults followed by possible values):
 this.betPlaced = false; //false or true
 this.turnPlayed = "inprogress"; // "false", "inprogress", "finished"
-*/
+
 
 // Tests
 
@@ -630,3 +1048,5 @@ for(var i = 0; i < game.players.length; i++)
 {
 	console.log(game.players[i].name);
 }
+
+*/
