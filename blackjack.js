@@ -142,8 +142,8 @@ $( document ).ready(function() {
 
       $('#HitMe').click(function(e){
         e.preventDefault();
-
-        refreshScreen([player1, player2, player3, player4, player5],0,'message',true,"none");
+        game.makeMove('hit'); //or 'stand'
+		  game.playAITurns();
 
       });
 
@@ -153,6 +153,19 @@ $( document ).ready(function() {
         setButtons("bet");
 
       });
+      
+      
+       $('#BetButton').click(function(e){
+        e.preventDefault();
+
+		  
+		  game.setPlayerBet(num);
+		  game.getAIBets();
+
+      });
+      
+      
+      
       
       $('#nameButton').click(function(e){
         e.preventDefault();
