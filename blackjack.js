@@ -282,27 +282,27 @@ $( document ).ready(function() {
       $('#BetAmount').css('visibility', 'visible');
     }
     else if(whatToShow == "start"){
-    
+
     	setButtons("none");
 		$('#nameButton').css('visibility', 'visible');
       $('#nameInputLine').css('visibility', 'visible');
-      $('h3').css('visibility', 'hidden');    	
-    	
+      $('h3').css('visibility', 'hidden');
+
     }
 
 
   }
-  
-  
+
+
   function startScreen(){
-  
+
 		var playerEmpty =
 		{
 			name: "",
 			bet: 0,
 			busted: false,
 			cards: []
-		};  		
+		};
   		refreshScreen([playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty],0,'',false,"start");
   }
 
@@ -472,13 +472,13 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
-    setTimeout(this.refreshScreen(this.players, this.pot, "Let's begin."),this.refreshDelay);
+    setTimeout(refreshScreen(this.players, this.pot, "Let's begin."),this.refreshDelay);
   };
 
   this.dealCards = function(){ //at start of game, give each player 2 cards
     for(var i=0; i<this.players.length; i++){
       this.players[i].addCards(this.deck.drawCards(2));
-      setTimeout(this.refreshScreen(this.players),this.refreshDelay);
+      setTimeout(refreshScreen(this.players),this.refreshDelay);
     }
   };
 
@@ -495,10 +495,10 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       } else if(this.players[i].isAI && !this.players[i].betPlaced){
         this.pot += this.players[i].getBet();
         this.players[i].betPlaced = true;
-        setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        setTimeout(refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
       }
     }
-    this.refreshScreen(this.players, this.pot, "", true, 'play');
+    refreshScreen(this.players, this.pot, "", true, 'play');
     this.playAITurns();
   }
 
@@ -508,7 +508,7 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
         this.pot += bet;
         this.players[i].decreasePlayerMoney(bet); //not sure what Hans' method is
         this.players[i].betPlaced = true;
-        setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        setTimeout(refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
         break;
       }
     }
@@ -535,11 +535,11 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
               this.players[i].turnPlayed = "finished";
             }
           }
-          setTimeout(this.refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
+          setTimeout(refreshScreen(this.players, this.pot, "", true, 'none'), this.refreshDelay);
         }
       }
     }
-    this.refreshScreen(this.players, this.pot, "", true, 'none');
+    refreshScreen(this.players, this.pot, "", true, 'none');
     this.resolveGame();
   }
 
@@ -559,14 +559,14 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
         }
 
         if(this.players[i].turnPlayed === "finished"){
-          setTimeout(this.refreshScreen(this.players),this.refreshDelay);
+          setTimeout(refreshScreen(this.players),this.refreshDelay);
           this.playAITurns();
         }
         break;
       }
 
     }
-    this.refreshScreen(this.players, this.pot, "", true, 'none');
+    refreshScreen(this.players, this.pot, "", true, 'none');
     this.resolveGame();
   }
 
@@ -574,7 +574,7 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   //   var bet = 0;
   //   for(var i=0; i<this.players.length; i++){
   //     this.pot += this.players[i].getBet(); //player object should update its bankroll
-  //     this.refreshScreen(this.players, this.pot);
+  //     refreshScreen(this.players, this.pot);
   //   }
   // };
 
@@ -597,7 +597,7 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
   //       else {
   //         //do nothing for now
   //       }
-  //       this.refreshScreen(this.players);
+  //       refreshScreen(this.players);
   //     }
   //   }
   // };
@@ -642,8 +642,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       this.players[i].givePlayerMoney(amount);
     }
   };
-
-  refreshScreen(players, pot, message = "", showAllCards = true)
 }
 
 function Deck(){
