@@ -135,7 +135,7 @@ var num = 0;
 
 $( document ).ready(function() {
 
-      refreshScreen([player1, player2, player3, player4, player5],0,'message',false,"play");
+      startScreen();
 
       $('#HitMe').click(function(e){
         e.preventDefault();
@@ -281,8 +281,28 @@ $( document ).ready(function() {
       $('#dollarSign').css('visibility', 'visible');
       $('#BetAmount').css('visibility', 'visible');
     }
+    else if(whatToShow == "start"){
+    
+    	setButtons("none");
+		$('#nameButton').css('visibility', 'visible');
+      $('#nameInputLine').css('visibility', 'visible');    	
+    	
+    }
 
 
+  }
+  
+  
+  function startScreen(){
+  
+		var playerEmpty =
+		{
+			name: "",
+			bet: 0,
+			busted: false,
+			cards: []
+		};  		
+  		refreshScreen([playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty],0,'',false,"start");
   }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
