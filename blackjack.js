@@ -285,7 +285,8 @@ $( document ).ready(function() {
     
     	setButtons("none");
 		$('#nameButton').css('visibility', 'visible');
-      $('#nameInputLine').css('visibility', 'visible');    	
+      $('#nameInputLine').css('visibility', 'visible');
+      $('h3').css('visibility', 'hidden');    	
     	
     }
 
@@ -642,9 +643,7 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     }
   };
 
-  this.refreshScreen = function(players, pot, message = "", showAllCards = true){ //presumably clears the screen, then updates it with new information
-    //Call's to Alex's functions here
-  };
+  refreshScreen(players, pot, message = "", showAllCards = true)
 }
 
 function Deck(){
