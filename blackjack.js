@@ -166,7 +166,7 @@ $( document ).ready(function() {
 			
 			game.initGame(players);
 			
-			refreshScreen(players,0,'Welcome To BlackJack!',false,"none");
+			refreshScreen(game.players,0,'Welcome To BlackJack!',false,"none");
 			
 			game.getAIBets();
 
