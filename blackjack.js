@@ -164,7 +164,15 @@ function Deck(){
   this.discards = [];
 
   this.drawCards = function(num){
-    return this.active.splice(0,num);
+    var top = this.active.splice(0,num);
+    
+    if(this.active.length < 52)
+    {
+    	this.active.concat(this.discards);
+    	this.shuffle();
+    }
+    
+    return top;
   };
 
   this.returnCards = function(cards){ //returns cards to discard pile
