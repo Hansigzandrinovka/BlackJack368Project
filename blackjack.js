@@ -157,7 +157,6 @@ $( document ).ready(function() {
         e.preventDefault();
 
   		  game.setPlayerBet(num);
-  		  game.getAIBets();
       });
 
       $('#nameButton').click(function(e){
@@ -170,7 +169,7 @@ $( document ).ready(function() {
 
   			var player_name = getPlayerName();
 
-  			var players = [["AI1","Pro",10000,game.deck],["AI1","Noob",10000,game.deck],[player_name,"Dealer Wannabe",10000,game.deck],["AI1","Random Guy",10000,game.deck],["AI1","Noob",10000,game.deck]];
+  			var players = [["AI1","Pro",10000,game.deck],["AI2","Noob",10000,game.deck],[player_name,null,10000,game.deck],["AI3","Random Guy",10000,game.deck],["AI4","Dealer Wannabe",10000,game.deck]];
 
   			game.initGame(players);
         game.startGame();
@@ -315,7 +314,6 @@ $( document ).ready(function() {
 
 
   function startScreen(){
-
 		var playerEmpty =
 		{
 			name: "",
@@ -323,9 +321,15 @@ $( document ).ready(function() {
 			busted: false,
 			cards: []
 		};
-  		refreshScreen([playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty],0,'',false,"start");
+    var playerEmpties = [playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty];
+		liveRefresh({
+        playerArray:playerEmpties,
+        pot:0,
+        console_message:"",
+        showCards:false,
+        buttonsToShow:"start"
+    });
   }
-
 
 	function getPlayerBet(){
 
@@ -336,36 +340,64 @@ $( document ).ready(function() {
 	}
 
 	function getPlayerName(){
-
 		var player_name = $('#nameInput').val();
-  		$('#nameInput').val("");
-
-  		return player_name;
+  	$('#nameInput').val("");
+  	return player_name;
 	}
 
-  function refreshScreen(playerArray,pot,console_message,showCards,buttonsToShow){
+  var refreshQueue = [];
 
-    if(typeof console_message === 'undefined' || console_message==null){changeMessage("");}
-    else{changeMessage(console_message);}
+  var refreshTimer = setInterval(processRefreshQueue, 500);
+
+  function processRefreshQueue(){
+    if(refreshQueue.length > 0){
+      //debugger;
+      console.log("calling refresh");
+      refreshScreen(refreshQueue.shift());
+    }
+  }
+
+  function addRefresh(refresh){
+    refreshQueue.push(refresh);
+  }
+
+  function liveRefresh(refresh){
+    if(refreshQueue.length > 0){
+      addRefresh(refresh);
+    } else {
+      refreshScreen(refresh);
+    }
+  }
+
+  var exampleRefreshObj = {
+    playerArray:copy(this.players),
+    pot:copy(this.pot),
+    console_message:"",
+    showCards:true,
+    buttonsToShow:"none"
+  }
+
+  function refreshScreen(refreshObj){
+
+    if(typeof refreshObj.console_message === 'undefined' || refreshObj.console_message==null){changeMessage("");}
+    else{changeMessage(refreshObj.console_message);}
 
     clearBoard();
 
-    changePot(pot);
+    changePot(refreshObj.pot);
 
-    setButtons(buttonsToShow);
+    setButtons(refreshObj.buttonsToShow);
 
-    for(var i =0;i<5;i++){
+    for(var i=0;i<5;i++){
 
       var player_id = "player" + (i+1).toString();
 
-      changeMoney(player_id,playerArray[i].bet);
-      setPlayerName(player_id,playerArray[i].name);
-      setBusted(player_id,playerArray[i].busted);
+      changeMoney(player_id,refreshObj.playerArray[i].bet);
+      setPlayerName(player_id,refreshObj.playerArray[i].name);
+      setBusted(player_id,refreshObj.playerArray[i].busted);
 
-      for(var j=0; j<playerArray[i].cards.length;j++){
-
-        addCard(playerArray[i].cards[j].value , playerArray[i].cards[j].suit , player_id,j,showCards)
-
+      for(var j=0; j<refreshObj.playerArray[i].cards.length;j++){
+        addCard(refreshObj.playerArray[i].cards[j].value, refreshObj.playerArray[i].cards[j].suit, player_id, j, refreshObj.showCards)
       }
 
     }
@@ -374,53 +406,79 @@ $( document ).ready(function() {
 
 ////// Game logic
 
-function blackjackGame(){ //game gets initialized when you create a blackjack game
+//Need to find citation from stackoverflow for this, not sure where I got it
+function copy(o) {
+   var output, v, key;
+   output = Array.isArray(o) ? [] : {};
+   for (key in o) {
+       v = o[key];
+       output[key] = (typeof v === "object") ? copy(v) : v;
+   }
+   return output;
+}
+
+function blackjackGame(){
+  //Requirements for using the game object:
+  //create a new game object (e.g. game); call game.initGame() on the object, passing in player definitions; call game.deck.initDeck().
   this.deck = new Deck();
   this.players = [];
-  this.refreshDelay = 1000;
 
   this.initGame = function(playerDefs){
-    //playerDefs example: [[name,type,initialBanked],[name,type,initialBanked], etc]
     //exactly 5 players are required
     this.initPlayers(playerDefs);
-    //this.deck.initDeck();
   };
 
   this.initPlayers = function(playerDefs){
     for(var i=0; i<playerDefs.length; i++){
-      this.players.push(new Player(playerDefs[i][0],playerDefs[i][0],playerDefs[i][0]));
+      this.players.push(new Player(playerDefs[i][0], playerDefs[i][1], playerDefs[i][2], playerDefs[i][3]));
     }
-    // players.push(new Player("AI1","Noob",10000));
-    // players.push(new Player("AI1","Noob",10000));
-    // players.push(new Player("AI1","Noob",10000));
-    // players.push(new Player("AI1","Noob",10000));
-    // players.push(new Player(name,null,10000));
   };
 
   this.pot = 0;
 
   this.startGame = function(name){ //called when player clicks start button - every time game , it asks player to keep playing, which calls startGame method
     //this.resetGame();
-    this.dealCards();
+
     // this.getBets();
     // this.playTurns();
     // this.resolveGame();
 
-    refreshScreen(this.players,0,'Welcome to BlackJack!',true,"none");
-    this.getAIBets();
+    // refreshScreen({
+    //   playerArray:this.players,
+    //   pot:0,
+    //   console_message:'Welcome to BlackJack!',
+    //   showCards:true,
+    //   buttonsToShow:"none"
+    // });
+    this.dealCards();
+    this.getBets();
   };
 
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
-    setTimeout(refreshScreen.bind(null, this.players, this.pot, "Let's begin.",false,"none"),this.refreshDelay);
+    //setTimeout(refreshScreen.bind(null, this.players, this.pot, "Let's begin.",false,"none"),this.refreshDelay);
+    this.startGame();
   };
 
   this.dealCards = function(){ //at start of game, give each player 2 cards
     for(var i=0; i<this.players.length; i++){
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
+      addRefresh({
+        playerArray:copy(this.players),
+        pot:copy(this.pot),
+        console_message:'',
+        showCards:true,
+        buttonsToShow:"none"
+      });
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
-      setTimeout(refreshScreen.bind(null, this.players, this.pot, "",true,"none"),this.refreshDelay+i*this.refreshDelay);
+      addRefresh({
+        playerArray:copy(this.players),
+        pot:copy(this.pot),
+        console_message:'',
+        showCards:true,
+        buttonsToShow:"none"
+      });
     }
   };
 
@@ -430,19 +488,30 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     }
   };
 
-  this.getAIBets = function(){
+  this.getBets = function(){ //polls all players for the amount they want to bet for this game, taking the money from the players
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
-        refreshScreen(this.players, this.pot, "", true, 'bet')
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:copy(this.pot),
+          console_message:this.players[i].name + ', please enter your bet.',
+          showCards:true,
+          buttonsToShow:"bet"
+        });
         break;
       } else if(this.players[i].isAI && !this.players[i].betPlaced){
-        this.pot += this.players[i].getBet();
+        this.pot += this.players[i].getBet(); //player object should update its bankroll
         this.players[i].betPlaced = true;
-        setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:copy(this.pot),
+          console_message:this.players[i].name + ' bets $' + this.players[i].bet + '.',
+          showCards:true,
+          buttonsToShow:"none"
+        });
       }
     }
-    refreshScreen(this.players, this.pot, "", true, 'play');
-    this.playAITurns();
+    this.playTurns();
   }
 
   this.setPlayerBet = function(bet){
@@ -451,22 +520,42 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
         this.pot += bet;
         this.players[i].decreasePlayerMoney(bet); //not sure what Hans' method is
         this.players[i].betPlaced = true;
-        setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        liveRefresh({
+          playerArray:this.players,
+          pot:this.pot,
+          console_message:'',
+          showCards:true,
+          buttonsToShow:"none"
+        });
+        this.getBets();
         break;
       }
     }
   }
 
-  this.playAITurns = function(){
+  this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && this.players[i].turnStatus === "unplayed"){
         //Is the player human? Exit and wait for input.
         this.players[i].turnStatus = "inprogress"
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:copy(this.pot),
+          console_message:'Your move!',
+          showCards:true,
+          buttonsToShow:"play"
+        });
         break;
       } else if(this.players[i].isAI && this.players[i].turnStatus === "unplayed"){
-          this.players[i].playTurn();
+          //this.players[i].playTurn(); //disabling until this is fixed. Right now effect is for AIs to stand with their initial two cards.
           this.players[i].turnStatus = "finished"
-          setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
+          addRefresh({
+            playerArray:copy(this.players),
+            pot:copy(this.pot),
+            console_message:'',
+            showCards:true,
+            buttonsToShow:"none"
+          });
         // var move = [];
         // while(this.players[i].busted === false && this.players[i].turnStatus === "inprogress"){
         //   move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
@@ -485,7 +574,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
         // }
       }
     }
-    refreshScreen(this.players, this.pot, "", true, 'none');
     this.resolveGame();
   }
 
@@ -502,51 +590,31 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
             this.players[i].busted = true;
             this.players[i].turnStatus = "finished";
           }
+          liveRefresh({
+            playerArray:this.players,
+            pot:this.pot,
+            console_message:'',
+            showCards:true,
+            buttonsToShow:"play"
+          });
         }
 
         if(this.players[i].turnStatus === "finished"){
-          setTimeout(refreshScreen.bind(null, this.players, this.pot, "",false,"none"),this.refreshDelay);
-          this.playAITurns();
+          liveRefresh({
+            playerArray:this.players,
+            pot:this.pot,
+            console_message:'',
+            showCards:true,
+            buttonsToShow:"none"
+          });
+          this.playTurns();
         }
         break;
       }
 
     }
-    refreshScreen(this.players, this.pot, "", true, 'none');
     this.resolveGame();
   }
-
-  // this.getBets = function(){ //polls all players for the amount they want to bet for this game, taking the money from the players
-  //   var bet = 0;
-  //   for(var i=0; i<this.players.length; i++){
-  //     this.pot += this.players[i].getBet(); //player object should update its bankroll
-  //     refreshScreen(this.players, this.pot);
-  //   }
-  // };
-
-  // this.playTurns = function(){
-  //   for(var i=0; i<this.players.length; i++){
-  //     var move = [];
-  //     while(this.players[i].busted === false && this.players[i].myTurn === true){
-  //       move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
-  //       if(move == 'stand'){ //player waits for round to end
-  //         this.players[i].myTurn = false;
-  //       }
-  //       else if(move == 'hit'){ //player gets another card
-  //         this.players[i].addCards(this.deck.drawCards(1));
-  //         var amount = this.players[i].getTotalAmount();
-  //         if(amount > 21){
-  //           this.players[i].busted = true;
-  //           this.players[i].myTurn = false;
-  //         }
-  //       }
-  //       else {
-  //         //do nothing for now
-  //       }
-  //       refreshScreen(this.players);
-  //     }
-  //   }
-  // };
 
   this.getWinners = function(){ //checks who is not busted, and determines who won
     var winners = [];
@@ -574,6 +642,13 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
     var winners = this.getWinners();
     this.distributeWinnings(this.pot/winners.length, winners);
     this.collectDiscards();
+    addRefresh({
+      playerArray:copy(this.players),
+      pot:copy(this.pot),
+      console_message:'Round over.', //Add message indicating winner(s)
+      showCards:true,
+      buttonsToShow:"none" //need to add some kind of continue button to start a new round
+    });
   };
 
   this.collectDiscards = function(){
@@ -589,8 +664,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       this.players[i].givePlayerMoney(amount);
     }
   };
-
-
 }
 
 function Deck(){
@@ -963,26 +1036,26 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 var game = new blackjackGame();
 game.initGame([["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck],["JimBob",null,10000,game.deck],["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck]]);
-game.getAIBets();
+game.getBets();
 
 //In Place Bet button
 //Get player bet
 //Will support multiplayer if we decide to implement
 game.setPlayerBet(num);
-game.getAIBets();
+game.getBets();
 
 //In Hit button
 game.makeMove('hit'); //or 'stand'
-game.playAITurns();
+game.playTurns();
 
 /*
-getAIBets method:
+getBets method:
 iterates through players, checks bet status
 if hasn't bet and is AI, calls the getBet function
 if isn't AI, but players are left, exits
-if checks and finds that all players have bet, calls playAITurns
+if checks and finds that all players have bet, calls playTurns
 
-playAITurns method:
+playTurns method:
 iterates through players, checks turn status
 if hasn't played and is AI, plays out the AI turn
 if isn't AI and hasn't played, exits
@@ -993,7 +1066,7 @@ iterates through players, checks turn status
 if all players marked 'finished', call resolveGame
 for first player with turn status 'inprogress', apply move, check if busted, mark accordingly. mark turn status 'finished' if busted, or if player stands
 if turn status current player is 'inprogress', exit
-if turn status current player just marked 'finished', call playAITurns
+if turn status current player just marked 'finished', call playTurns
 
 new player attributes (defaults followed by possible values):
 this.betPlaced = false; //false or true
