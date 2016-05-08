@@ -852,9 +852,9 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 
 	//								*A note on Game logic* - I think the game is supposed to determine if player goes over limit
-	if(this.isAI == "Pro")
+	this.playTurn = function()
 	{
-		this.playTurn = function()
+		if(this.isAI == "Pro")
 		{
 			var continueTurn = true;
 			var card = "";
@@ -869,7 +869,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 				}
 				else if(theDeck.lookAtCard().value + endValue < 22)
 				{
-					card = theDeck.drawCard(1);
+					card = theDeck.drawCards(1)[0];
 					//this.endValue += card.value;
 
 					this.givePlayerCard(card);
@@ -881,11 +881,8 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					continueTurn = false;
 				}
 			}
-		};
-	}
-	else if(this.isAI == "Noob")
-	{
-		this.playTurn = function()
+		}
+		else if(this.isAI == "Noob")
 		{
 			var continueTurn = true;
 			var card = "";
@@ -900,7 +897,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 				}
 				else if(theDeck.lookAtCard().value + endValue >= 22)
 				{
-					card = theDeck.drawCard(1);
+					card = theDeck.drawCards(1)[0];
 					//this.endValue += card.value;
 					this.givePlayerCard(card);
 
@@ -912,18 +909,15 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					continueTurn = false;
 				}
 			}
-		};
-	}
-	else if(this.isAI == "Dealer Wannabe")
-	{
-		this.playTurn = function()
+		}
+		else if(this.isAI == "Dealer Wannabe")
 		{
 			var card = "";
 			var endValue = this.getTotalAmount();
 
 			while(this.endValue < 17)
 			{
-				card = theDeck.drawCard(1);
+				card = theDeck.drawCards(1)[0];
 				//this.endValue += card.value;
 				this.givePlayerCard(card);
 
@@ -935,11 +929,8 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			{
 				this.busted = true;
 			}
-		};
-	}
-	else if(this.isAI == "Random Guy")
-	{
-		this.playTurn = function()
+		}
+		else if(this.isAI == "Random Guy")
 		{
 			var card = "";
 
@@ -947,7 +938,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 			while(continueTurn == 1)
 			{
-				card = theDeck.drawCard(1);
+				card = theDeck.drawCards(1)[0];
 				//this.endValue += card.value;
 				this.givePlayerCard(card);
 
@@ -962,8 +953,8 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					this.busted = true;
 				}
 			}
-		};
-	}
+		}
+	};
 }
 
 /*
