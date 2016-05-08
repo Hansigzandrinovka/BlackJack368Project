@@ -422,7 +422,6 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
       setTimeout(refreshScreen.bind(null, this.players, this.pot, "",true,"none"),this.refreshDelay+i*this.refreshDelay);
     }
-    break;
   };
 
   this.resetPlayers = function(){
@@ -460,27 +459,30 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
 
   this.playAITurns = function(){
     for(var i=0; i<this.players.length; i++){
-      if(this.players[i].isAI === null && this.players[i].turnPlayed === "false"){
-        this.players[i].turnPlayed = "inprogress"
+      if(this.players[i].isAI === null && this.players[i].turnStatus === "unplayed"){
+        //Is the player human? Exit and wait for input.
+        this.players[i].turnStatus = "inprogress"
         break;
-      } else if(this.players[i].isAI && this.players[i].turnPlayed === "false"){
-        var move = [];
-        while(this.players[i].busted === false && this.players[i].turnPlayed === "inprogress"){
-          move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
-          if(move == 'stand'){ //player waits for round to end
-            this.players[i].turnPlayed = "finished";
-
-          }
-          else if(move == 'hit'){ //player gets another card
-            this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
-            var amount = this.players[i].getTotalAmount();
-            if(amount > 21){
-              this.players[i].busted = true;
-              this.players[i].turnPlayed = "finished";
-            }
-          }
+      } else if(this.players[i].isAI && this.players[i].turnStatus === "unplayed"){
+          this.players[i].playTurn();
+          this.players[i].turnStatus = "finished"
           setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
-        }
+        // var move = [];
+        // while(this.players[i].busted === false && this.players[i].turnStatus === "inprogress"){
+        //   move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
+        //   if(move == 'stand'){ //player waits for round to end
+        //     this.players[i].turnStatus = "finished";
+        //   }
+        //   else if(move == 'hit'){ //player gets another card
+        //     this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
+        //     var amount = this.players[i].getTotalAmount();
+        //     if(amount > 21){
+        //       this.players[i].busted = true;
+        //       this.players[i].turnStatus = "finished";
+        //     }
+        //   }
+        //   setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
+        // }
       }
     }
     refreshScreen(this.players, this.pot, "", true, 'none');
@@ -489,20 +491,20 @@ function blackjackGame(){ //game gets initialized when you create a blackjack ga
 
   this.makeMove = function(move){
     for(var i=0; i<this.players.length; i++){
-      if(this.players[i].isAI === null && this.players[i].turnPlayed === "inprogress"){
+      if(this.players[i].isAI === null && this.players[i].turnStatus === "inprogress"){
         if(move == 'stand'){ //player waits for round to end
-          this.players[i].turnPlayed = "finished";
+          this.players[i].turnStatus = "finished";
         }
         else if(move == 'hit'){ //player gets another card
           this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
           var amount = this.players[i].getTotalAmount();
           if(amount > 21){
             this.players[i].busted = true;
-            this.players[i].turnPlayed = "finished";
+            this.players[i].turnStatus = "finished";
           }
         }
 
-        if(this.players[i].turnPlayed === "finished"){
+        if(this.players[i].turnStatus === "finished"){
           setTimeout(refreshScreen.bind(null, this.players, this.pot, "",false,"none"),this.refreshDelay);
           this.playAITurns();
         }
@@ -673,6 +675,8 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 	this.isAI = isAI; //null for not AI
 	this.busted = false; // track if player over 21 or not
+  this.turnStatus = "unplayed";
+
 	this.cardVals = []; //stores the values on the list
 	this.cardSuites = [];
 
@@ -997,7 +1001,7 @@ if turn status current player just marked 'finished', call playAITurns
 
 new player attributes (defaults followed by possible values):
 this.betPlaced = false; //false or true
-this.turnPlayed = "inprogress"; // "false", "inprogress", "finished"
+this.turnStatus = "inprogress"; // "unplayed", "inprogress", "finished"
 
 
 // Tests
