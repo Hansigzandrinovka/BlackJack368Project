@@ -621,6 +621,10 @@ function Deck(){
 
     return top;
   };
+  
+  this.lookAtCard = function(){
+  	return this.active[0];
+  }
 
   this.returnCards = function(cards){ //returns cards to discard pile
     for(var i=0; i<cards.length; i++){
