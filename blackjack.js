@@ -170,7 +170,7 @@ $( document ).ready(function() {
 
   			var player_name = getPlayerName();
 
-  			var players = [["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck],[player_name,null,10000,game.deck],["AI1","Noob",10000,game.deck],["AI1","Noob",10000,game.deck]];
+  			var players = [["AI1","Pro",10000,game.deck],["AI1","Noob",10000,game.deck],[player_name,"Dealer Wannabe",10000,game.deck],["AI1","Random Guy",10000,game.deck],["AI1","Noob",10000,game.deck]];
 
   			game.initGame(players);
         game.startGame();
@@ -676,6 +676,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	this.isAI = isAI; //null for not AI
 	this.busted = false; // track if player over 21 or not
   this.turnStatus = "unplayed";
+  this.betPlaced = false;
 
 	this.cardVals = []; //stores the values on the list
 	this.cardSuites = [];
