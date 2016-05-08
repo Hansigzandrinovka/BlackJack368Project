@@ -322,7 +322,7 @@ $( document ).ready(function() {
 			cards: []
 		};
     var playerEmpties = [playerEmpty, playerEmpty, playerEmpty, playerEmpty, playerEmpty];
-		liveRefresh({
+		addRefresh({
         playerArray:playerEmpties,
         pot:0,
         console_message:"",
@@ -500,7 +500,8 @@ function blackjackGame(){
         });
         break;
       } else if(this.players[i].isAI && !this.players[i].betPlaced){
-        this.pot += this.players[i].getBet(); //player object should update its bankroll
+        //this.players[i].setBet(null); //waiting for implementation
+        this.pot += this.players[i].getBet();
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
@@ -510,19 +511,25 @@ function blackjackGame(){
           buttonsToShow:"none"
         });
       }
+
+      if(i == this.players.length-1){
+        this.playTurns();
+      }
     }
-    this.playTurns();
   }
 
   this.setPlayerBet = function(bet){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
-        this.pot += bet;
-        this.players[i].decreasePlayerMoney(bet); //not sure what Hans' method is
+        //this.players[i].setBet(bet);
+//Dummy info until setBet is written
+        this.players[i].bet = 100;
+        this.players[i].banked -= 100;
+        this.pot += 100;
         this.players[i].betPlaced = true;
-        liveRefresh({
-          playerArray:this.players,
-          pot:this.pot,
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:copy(this.pot),
           console_message:'',
           showCards:true,
           buttonsToShow:"none"
@@ -537,18 +544,18 @@ function blackjackGame(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && this.players[i].turnStatus === "unplayed"){
         //Is the player human? Exit and wait for input.
-        this.players[i].turnStatus = "inprogress"
+        this.players[i].turnStatus = "inprogress";
         addRefresh({
           playerArray:copy(this.players),
           pot:copy(this.pot),
-          console_message:'Your move!',
+          console_message:'Your move, ' + this.players[i].name + '!',
           showCards:true,
           buttonsToShow:"play"
         });
         break;
       } else if(this.players[i].isAI && this.players[i].turnStatus === "unplayed"){
-          //this.players[i].playTurn(); //disabling until this is fixed. Right now effect is for AIs to stand with their initial two cards.
-          this.players[i].turnStatus = "finished"
+          this.players[i].playTurn();
+          this.players[i].turnStatus = "finished";
           addRefresh({
             playerArray:copy(this.players),
             pot:copy(this.pot),
@@ -573,8 +580,11 @@ function blackjackGame(){
         //   setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
         // }
       }
+
+      if(i == this.players.length-1){
+        this.resolveGame();
+      }
     }
-    this.resolveGame();
   }
 
   this.makeMove = function(move){
@@ -590,7 +600,7 @@ function blackjackGame(){
             this.players[i].busted = true;
             this.players[i].turnStatus = "finished";
           }
-          liveRefresh({
+          addRefresh({
             playerArray:this.players,
             pot:this.pot,
             console_message:'',
@@ -600,7 +610,7 @@ function blackjackGame(){
         }
 
         if(this.players[i].turnStatus === "finished"){
-          liveRefresh({
+          addRefresh({
             playerArray:this.players,
             pot:this.pot,
             console_message:'',
@@ -641,6 +651,7 @@ function blackjackGame(){
   this.resolveGame = function(){
     var winners = this.getWinners();
     this.distributeWinnings(this.pot/winners.length, winners);
+    this.pot = 0;
     this.collectDiscards();
     addRefresh({
       playerArray:copy(this.players),
@@ -694,7 +705,7 @@ function Deck(){
 
     return top;
   };
-  
+
   this.lookAtCard = function(){
   	return this.active[0];
   }
