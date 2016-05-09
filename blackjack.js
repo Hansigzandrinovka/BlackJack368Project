@@ -278,7 +278,7 @@ $( document ).ready(function() {
 
   function changePot(amount){
 
-    $('#money-pot').html('Pot: $' + amount.toString());
+    $('#money_pot').html('Pot: $' + amount.toString());
   }
 
   function setButtons(whatToShow){
