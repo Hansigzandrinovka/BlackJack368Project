@@ -802,19 +802,40 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		this.banked = 1000;
 	}
 
+	//output: the amount player is currently realistically betting
+	//if bet is higher than banked amount, lowers to banked amount
 	this.getBet = function() //returns bet amount that player set, 0ing it, deducting it from their bank
 	{
+		//
 		if(this.bet > this.banked) //player bets too much
 		{
 			this.bet = this.banked;
-			this.banked = 0;
-			return this.bet;
 		}
-		else
+		return this.bet;
+	}
+	
+	this.setBet = function(amount) //if player is  AI, asks AI for bet amount, else if amount given, try to set to amount, else set to 0
+	{
+		var betAmount = 0;
+		if(this.isAI != null) //if player is an AI
 		{
-			this.banked -= this.bet;
-			return this.bet;
+			betAmount = this.setBetAI();
+			this.betPlaced = true;
 		}
+		else if(amount != undefined) //player not AI, and parameter amount was given
+		{
+			betAmount = amount;
+			this.betPlaced = true;
+		}
+		//otw, betAmount stays 0 because player gave no concrete value to use
+		// and since bet is 0, player has not placed a bet
+		if(betAmount > this.banked) //if trying to bet more than he has
+		{
+			betAmount = this.banked; //assume he is all-in
+		}
+		this.bet = betAmount;
+		this.banked -= this.bet;
+		return betAmount;
 	}
 	
 	this.getAIBet = function()
@@ -882,6 +903,16 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			}
 		}
 	};
+	
+	//input: a list of cards to add from
+	//takes the cards one at a time, and validates, then adds them to deck
+	this.givePlayerCards = function(listOfCards)
+	{
+		for(var i = 0; i < listOfCards.length; i++)
+		{
+			this.givePlayerCard(listOfCards[i]);
+		}
+	}
 
 	//output: a list of Cards
 	//this method is here for safety sake - ie the single vs double = typo
@@ -900,15 +931,6 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			theCard = this.cards.pop();
 		}
 		return theCard;
-	};
-
-	this.getPlayerHandValues = function() //to be deleted
-	{
-		return this.cardVals;
-	};
-	this.getPlayerHandSuites = function() //to be deleted
-	{
-		return this.cardSuites;
 	};
 
 	this.reset = function() //destroy card array, reset bet to 0
