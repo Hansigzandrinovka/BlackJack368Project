@@ -824,11 +824,11 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 		var cardTotal = 0; //running point total to return at end of method
 		for(var i = 0; i < this.cards.length; i++) //collect all cards from player, treat aces later
 		{
-			if((this.cards[i] >= 2) && (this.cards[i] <= 10)) //ace is worth either 1 or l1, and JQK are worth 10
+			if((this.cards[i].value >= 2) && (this.cards[i].value <= 10)) //ace is worth either 1 or l1, and JQK are worth 10
 			{
 				cardTotal += this.cards[i].value;
 			}
-			else if(this.cards[i] == 1) //if ace card
+			else if(this.cards[i].value == 1) //if ace card
 			{
 				acesCount ++;
 			}
@@ -959,105 +959,222 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	//								*A note on Game logic* - I think the game is supposed to determine if player goes over limit
 	this.playTurn = function()
 	{
+		//If the AI is a Pro (will always choose the right option)
 		if(this.isAI == "Pro")
 		{
+			//Initialize variable used for ending turns when necessary
 			var continueTurn = true;
+			
+			//Create variable that will be used for getting cards from the deck and adding them to the player's hand
 			var card = "";
+			
+			//Get the current value of the players hand
 			var endValue = this.getTotalAmount();
 
+			//While the AI can still continue
 			while(continueTurn)
 			{
+				//If the AI has already busted
 				if(endValue >= 22)
 				{
+					//End the AIs turn
 					continueTurn = false;
+
+					//Change the AIs bool variable to show that they have busted
 					this.busted = true;
 				}
+				//If the next card in the deck wouldn't cause the AI to go over
 				else if(theDeck.lookAtCard().value + endValue < 22)
 				{
+					//Draw a card
 					card = theDeck.drawCards(1)[0];
 					//this.endValue += card.value;
 
+					//Put the card in the AI's hand
 					this.givePlayerCard(card);
 					//this.cardVals.push(card.value);
 					//this.cardSuites.push(card.suite);
+
+					//Recalculate the value of the player's hand
+					endValue = this.getTotalAmount();
+					
+					//Refresh the game board
+					addRefresh({
+						playerArray:copy(this.players),
+						pot:copy(this.pot),
+						console_message:'',
+						showCards:true,
+						buttonsToShow:"none"
+					});
 				}
+				//If the next card would cause the AI to bust
 				else
 				{
+					//End the turn
 					continueTurn = false;
 				}
 			}
+			
+			console.log(endValue);
 		}
+		//If the AI is a Noob (will always choose the wrong option)
 		else if(this.isAI == "Noob")
 		{
+			//Initialize variable that will be used for determining if the AI's turn should end
 			var continueTurn = true;
+
+			//Create variable that will be used for storing cards from the deck and adding them to the AI's hand
 			var card = "";
+
+			//Get the current value of the AI's hand
 			var endValue = this.getTotalAmount();
 
+			//If the AI's turn can continue
 			while(continueTurn)
 			{
+				//If the AI has already busted
 				if(endValue >= 22)
 				{
+					//End the turn
 					continueTurn = false;
+					
+					//Change the bool variable to show that the AI has busted
 					this.busted = true;
 				}
+				//If the next card in the deck would cause the AI to bust
 				else if(theDeck.lookAtCard().value + endValue >= 22)
 				{
+					//Draw a card from the deck
 					card = theDeck.drawCards(1)[0];
 					//this.endValue += card.value;
+					
+					//Add the card to the AI's hand
 					this.givePlayerCard(card);
 
 					//this.cardVals.push(card.value);
 					//this.cardSuites.push(card.suite);
+					
+					//Recalculate the value of the AI's hand
+					endValue = this.getTotalAmount();
+					
+					//Refresh the game board
+					addRefresh({
+						playerArray:copy(this.players),
+						pot:copy(this.pot),
+						console_message:'',
+						showCards:true,
+						buttonsToShow:"none"
+					});
 				}
+				//If the next card wouldn't cause the AI to bust
 				else
 				{
+					//End the turn
 					continueTurn = false;
 				}
 			}
+			
+			console.log(endValue);
 		}
+		//If the AI is a Dealer Wannabe (follows the same rules that a standard dealer would)
 		else if(this.isAI == "Dealer Wannabe")
 		{
+			//Create a variable for getting cards from the deck and putting them into the AI's hand
 			var card = "";
+			
+			//Get the current value of the AI's hand
 			var endValue = this.getTotalAmount();
 
 			while(this.endValue < 17)
+			//While the value of the AI's hand is less than 17
+			while(endValue < 17)
 			{
+				//Draw a card from the deck
 				card = theDeck.drawCards(1)[0];
 				//this.endValue += card.value;
+				
+				//Add the card to the AI's hand
 				this.givePlayerCard(card);
 
 				//this.cardVals.push(card.value);
 				//this.cardSuites.push(card.suite);
+				
+				//Recalculate the value of the Ai's hand
+				endValue = this.getTotalAmount();
+
+				//Refresh the game board
+				addRefresh({
+						playerArray:copy(this.players),
+						pot:copy(this.pot),
+						console_message:'',
+						showCards:true,
+						buttonsToShow:"none"
+				});
 			}
 
+			//If the AI busted
 			if(endValue >= 22)
 			{
+				//Change the bool variable to show that the AI is busted
 				this.busted = true;
 			}
+			
+			console.log(endValue);
 		}
+		//If the AI is a Random Guy (will randomly decide to hit or stay)
 		else if(this.isAI == "Random Guy")
 		{
+			//Create a variable for getting cards from the deck and adding them to the AI's hand
 			var card = "";
+			
+			//Get the current value of the AI's hand
+			var endValue = this.getTotalAmount();
 
+			//Get a random number that is either 1 or 2: 1 will continue the AI's turn, 2 will end it
 			var continueTurn = Math.floor((Math.random() * 2) + 1);
 
 			while(continueTurn == 1)
+			//While the AI's turn can continue
+			while(continueTurn == 1 && !this.busted)
 			{
+				//Draw a card from the deck
 				card = theDeck.drawCards(1)[0];
 				//this.endValue += card.value;
+				
+				//Add the card to the AI's hand
 				this.givePlayerCard(card);
 
 				//this.cardVals.push(card.value);
 				//this.cardSuites.push(card.suite);
 
+				
+				//Recalculate the value of the AI's hand
+				endValue = this.getTotalAmount();
+
+				//Refresh the game board
+				addRefresh({
+						playerArray:copy(this.players),
+						pot:copy(this.pot),
+						console_message:'',
+						showCards:true,
+						buttonsToShow:"none"
+				});
+
+				//Recalculate the variable for determing the AI's actions
 				continueTurn = Math.floor((Math.random() * 2) + 1);
 
+				//If the AI has busted
 				if(endValue >= 22)
 				{
+					//End the turn
 					continueTurn = 2;
+					
+					//Change the bool variable to show that the AI has busted
 					this.busted = true;
 				}
 			}
+			
+			console.log(endValue);
 		}
 	};
 }
