@@ -174,6 +174,20 @@ $( document ).ready(function() {
   			game.initGame(players);
         game.startGame();
       });
+      
+      $('#quit').click(function(e){
+        e.preventDefault();
+
+        
+      });
+      
+      $('#continue').click(function(e){
+        e.preventDefault();
+
+        $('h3').css('visibility', 'visible');
+		  $('#continue').css('visibility', 'hidden');
+		  $('#quit').css('visibility', 'hidden');
+      });
   });
 
   function addCard(num,suit,player,numCard,showCards){
@@ -307,6 +321,13 @@ $( document ).ready(function() {
       $('#nameInputLine').css('visibility', 'visible');
       $('h3').css('visibility', 'hidden');
 
+    }
+    else if(whatToShow == "continue"){
+    
+		setButtons("none");
+		$('h3').css('visibility', 'hidden');
+		$('#continue').css('visibility', 'visible');
+		$('#quit').css('visibility', 'visible');    
     }
 
 
