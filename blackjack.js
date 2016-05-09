@@ -413,7 +413,7 @@ $( document ).ready(function() {
 
       var player_id = "player" + (i+1).toString();
 
-      changeMoney(player_id,refreshObj.playerArray[i].bet);
+      changeMoney(player_id,refreshObj.playerArray[i].banked);
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
 
