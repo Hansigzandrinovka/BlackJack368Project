@@ -728,7 +728,27 @@ function Deck(){
   };
 
   this.lookAtCard = function(){
-  	return this.active[0];
+  	//Get the top card from the deck
+	var top = this.active[0];
+	
+	//If it's a number card
+	if(top.value >= 2 && top.value <= 10)
+	{
+		//Return the cards value
+		return top.value;
+	}
+	//If it's a face card
+	else if(top.value > 10)
+	{
+		//Return 10 (the value of all face a cards)
+		return 10;
+	}
+	//If it's an ace
+	else 
+	{
+		//Return the max value for an ace, 11
+		return 11;
+	}
   }
 
   this.returnCards = function(cards){ //returns cards to discard pile
@@ -1021,7 +1041,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					this.busted = true;
 				}
 				//If the next card in the deck wouldn't cause the AI to go over
-				else if(theDeck.lookAtCard().value + endValue < 22)
+				else if(theDeck.lookAtCard() + endValue < 22)
 				{
 					//Draw a card
 					card = theDeck.drawCards(1)[0];
@@ -1079,7 +1099,7 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					this.busted = true;
 				}
 				//If the next card in the deck would cause the AI to bust
-				else if(theDeck.lookAtCard().value + endValue >= 22)
+				else if(theDeck.lookAtCard() + endValue >= 22)
 				{
 					//Draw a card from the deck
 					card = theDeck.drawCards(1)[0];
@@ -1122,7 +1142,6 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			//Get the current value of the AI's hand
 			var endValue = this.getTotalAmount();
 
-			while(this.endValue < 17)
 			//While the value of the AI's hand is less than 17
 			while(endValue < 17)
 			{
