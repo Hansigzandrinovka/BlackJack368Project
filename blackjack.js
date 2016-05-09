@@ -816,6 +816,21 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 			return this.bet;
 		}
 	}
+	
+	this.getAIBet = function()
+	{
+		if(100 > this.banked)
+		{
+			var temp = this.banked;
+			this.banked = 0;
+			return temp;
+		}
+		else
+		{
+			this.banked -= 100;
+			return 100;
+		}
+	}
 
 	//output: numerical sum of point values for each card in player's hand (found through logic applied to cards)
 	this.getTotalAmount = function()
