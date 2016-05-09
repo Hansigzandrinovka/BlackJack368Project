@@ -170,8 +170,11 @@ $( document ).ready(function() {
   			var player_name = getPlayerName();
 
   			var players = [["AI1","Pro",10000,game.deck],["AI2","Noob",10000,game.deck],[player_name,null,10000,game.deck],["AI3","Random Guy",10000,game.deck],["AI4","Dealer Wannabe",10000,game.deck]];
-
+	
   			game.initGame(players);
+  			
+  			//setBusted("player1",true);
+  			
         	game.startGame();
       });
       
@@ -184,8 +187,7 @@ $( document ).ready(function() {
       $('#continue').click(function(e){
         e.preventDefault();
 
-        $('h3').css('visibility', 'visible');
-		  $('#continue').css('visibility', 'hidden');
+        $('#continue').css('visibility', 'hidden');
 		  $('#quit').css('visibility', 'hidden');
       });
   });
@@ -249,39 +251,67 @@ $( document ).ready(function() {
     $('#computer4').find('img').remove();
   }
 
-  function changeMoney(player_id,amount){
+///////////////////////////////////////////////////////////////////////////////////////////
+
+//Player Attribute Display Functions
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+  function changeMoney(player_id,amount){ //sets the display for the amount of money the player has
 
     $('#money_'+player_id).find('span.money').html(": $" + amount.toString());
   }
 
-  function setPlayerName(player_id,player_name){
+
+
+  function setPlayerName(player_id,player_name){ //sets the display for the name of the player
 
     $('#money_'+player_id).find('span.name').html(player_name);
+    
   }
 
-  function setBusted(player_id,isThePlayerBusted){
+	function setBusted(player_id,isThePlayerBusted){ //sets the display for whether the player has busted or not
 
-    if(isThePlayerBusted){
+		if(isThePlayerBusted){
 
-      $('#money_'+player_id).find('span.busted').html("  Busted!");
-    }
-    else{
-      $('#money_'+player_id).find('span.busted').html("");
-    }
+      	$('#money_'+player_id).find('span.busted').html("  Busted!");
+    	}
+    	else{
+      	$('#money_'+player_id).find('span.busted').html("");
+    	}
+  }
+  
+  function setPoints(player_id,amount){ //displays the amount of points for the player
+    		
+  		$('#money_'+player_id).find('span.points').html(" " + amount.toString());
   }
 
-  function changeMessage(message){
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+//Game Attribute Display Functions
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+  function changePot(amount){ //displays the amount in the pot
+
+    $('#money_pot').html('Pot: $' + amount.toString());
+  }
+  
+  
+  
+  
+  function changeMessage(message){ //changes the display message
 
     $('#Message').html(message);
 
   }
-
-  function changePot(amount){
-
-    $('#money_pot').html('Pot: $' + amount.toString());
-  }
-
-  function setButtons(whatToShow){
+  
+  
+    function setButtons(whatToShow){ //changes which set of buttons are displayed, the parameter is bet,play,none,all,start,or continue
 
     if(whatToShow == "bet"){
 
@@ -325,13 +355,16 @@ $( document ).ready(function() {
     else if(whatToShow == "continue"){
     
 		setButtons("none");
-		$('h3').css('visibility', 'hidden');
 		$('#continue').css('visibility', 'visible');
 		$('#quit').css('visibility', 'visible');    
     }
 
 
   }
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
   function startScreen(){
@@ -392,7 +425,7 @@ $( document ).ready(function() {
 
   var exampleRefreshObj = {
     playerArray:copy(this.players),
-    pot:copy(this.pot),
+    pot:0+this.pot,
     console_message:"",
     showCards:true,
     buttonsToShow:"none"
@@ -416,6 +449,7 @@ $( document ).ready(function() {
       changeMoney(player_id,refreshObj.playerArray[i].banked);
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
+      setPoints( player_id,refreshObj.playerArray[i].getTotalAmount());
 
       for(var j=0; j<refreshObj.playerArray[i].cards.length;j++){
         addCard(refreshObj.playerArray[i].cards[j].value, refreshObj.playerArray[i].cards[j].suit, player_id, j, refreshObj.showCards)
@@ -778,6 +812,11 @@ function Card(suit,value){
   this.value = value;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//  Player Class
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (10), king 13 (10), Ace 1 (1 or 11)
 //name is a string representing the current player's name
