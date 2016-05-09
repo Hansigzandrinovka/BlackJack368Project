@@ -670,13 +670,13 @@ function blackjackGame(){
         }
 
         if(this.players[i].turnStatus === "finished"){
-          addRefresh({
+          /*addRefresh({
             playerArray:this.players,
             pot:this.pot,
             console_message:'',
             showCards:true,
             buttonsToShow:"none"
-          });
+          });*/
           this.playTurns();
         }
         break;
@@ -718,7 +718,7 @@ function blackjackGame(){
       pot:0+this.pot,
       console_message:'Round over.', //Add message indicating winner(s)
       showCards:true,
-      buttonsToShow:"none" //need to add some kind of continue button to start a new round
+      buttonsToShow:"continue" //need to add some kind of continue button to start a new round
     });
   };
 
