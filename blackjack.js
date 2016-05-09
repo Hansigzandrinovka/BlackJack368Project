@@ -169,7 +169,7 @@ $( document ).ready(function() {
 
   			var player_name = getPlayerName();
 
-  			var players = [["AI1","Pro",10000,game.deck],["AI2","Noob",10000,game.deck],[player_name,null,10000,game.deck],["AI3","Random Guy",10000,game.deck],["AI4","Dealer Wannabe",10000,game.deck]];
+  			var players = [["AI1","Pro",10000,game],["AI2","Noob",10000,game],[player_name,null,10000,game],["AI3","Random Guy",10000,game],["AI4","Dealer Wannabe",10000,game]];
 	
   			game.initGame(players);
   			
@@ -180,12 +180,16 @@ $( document ).ready(function() {
       
       $('#quit').click(function(e){
         e.preventDefault();
-
-        
+		
+		
       });
       
       $('#continue').click(function(e){
         e.preventDefault();
+		
+		game.resolveGame();
+		game.resetPlayers();
+		game.startGame();
 
         $('#continue').css('visibility', 'hidden');
 		  $('#quit').css('visibility', 'hidden');
@@ -507,6 +511,7 @@ function blackjackGame(){
     // });
     this.dealCards();
     this.getBets();
+	//this.resolveGame();
   };
 
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
@@ -608,7 +613,7 @@ function blackjackGame(){
           buttonsToShow:"play"
         });
         break;
-      } else if(this.players[i].isAI && this.players[i].turnStatus === "unplayed"){
+      } else if(this.players[i].isAI !== null && this.players[i].turnStatus === "unplayed"){
           this.players[i].playTurn();
           this.players[i].turnStatus = "finished";
           addRefresh({
@@ -818,13 +823,13 @@ function Card(suit,value){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (10), king 13 (10), Ace 1 (1 or 11)
+function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (10), king 13 (10), Ace 1 (1 or 11)
 //name is a string representing the current player's name
 //isAI is a boolean representing  if the player is autonomous or must wait for user operations
 //initialBanked is the initial amount (valid input checked) of money player starts with
 //deckObject is used by AI to draw from the deck
 {
-	var theDeck = deckObject;
+	var theDeck = gameObject.deck;
 
 	this.bet = 0; //tracks the amount player has bet
 	if(name == "HeavyRain") //easter egg
@@ -843,8 +848,8 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 	this.isAI = isAI; //null for not AI
 	this.busted = false; // track if player over 21 or not
-  this.turnStatus = "unplayed";
-  this.betPlaced = false;
+    this.turnStatus = "unplayed";
+    this.betPlaced = false;
 
 	this.cardVals = []; //stores the values on the list
 	this.cardSuites = [];
@@ -996,6 +1001,9 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 	{
 		this.bet = 0;
 		this.cards = []; //Does NOT check if cards still in hand to return to deck
+		this.busted = false;
+		this.turnStatus = "unplayed";
+		this.betPlaced = false;
 	};
 
 	//input: an index to poll
@@ -1096,12 +1104,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					
 					//Refresh the game board
 					addRefresh({
-						playerArray:copy(this.players),
-						pot:0+this.pot,
+						playerArray:copy(gameObject.players),
+						pot:0+gameObject.pot,
 						console_message:'',
 						showCards:true,
 						buttonsToShow:"none"
-					});
+					  });
 				}
 				//If the next card would cause the AI to bust
 				else
@@ -1155,12 +1163,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 					
 					//Refresh the game board
 					addRefresh({
-						playerArray:copy(this.players),
-						pot:0+this.pot,
+						playerArray:copy(gameObject.players),
+						pot:0+gameObject.pot,
 						console_message:'',
 						showCards:true,
 						buttonsToShow:"none"
-					});
+					  });
 				}
 				//If the next card wouldn't cause the AI to bust
 				else
@@ -1199,12 +1207,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 				//Refresh the game board
 				addRefresh({
-						playerArray:copy(this.players),
-						pot:0+this.pot,
-						console_message:'',
-						showCards:true,
-						buttonsToShow:"none"
-				});
+					playerArray:copy(gameObject.players),
+					pot:0+gameObject.pot,
+					console_message:'',
+					showCards:true,
+					buttonsToShow:"none"
+				  });
 			}
 
 			//If the AI busted
@@ -1248,12 +1256,12 @@ function Player(name, isAI, initialBanked,deckObject) //jack 11 (10), queen 12 (
 
 				//Refresh the game board
 				addRefresh({
-						playerArray:copy(this.players),
-						pot:0+this.pot,
-						console_message:'',
-						showCards:true,
-						buttonsToShow:"none"
-				});
+					playerArray:copy(gameObject.players),
+					pot:0+gameObject.pot,
+					console_message:'',
+					showCards:true,
+					buttonsToShow:"none"
+				  });
 
 				//Recalculate the variable for determing the AI's actions
 				continueTurn = Math.floor((Math.random() * 2) + 1);
