@@ -166,6 +166,7 @@ $( document ).ready(function() {
         e.preventDefault();
 
      		$('h3').css('visibility', 'visible');
+     		$('h4').css('visibility', 'visible');
      		
       	$('#nameInputArea').css('visibility', 'hidden');
 
