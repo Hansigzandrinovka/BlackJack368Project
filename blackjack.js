@@ -690,7 +690,6 @@ function blackjackGame(){
       }
 
     }
-    this.resolveGame();
   }
 
   this.getWinners = function(){ //checks who is not busted, and determines who won
