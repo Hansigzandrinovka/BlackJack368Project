@@ -181,6 +181,7 @@ $( document ).ready(function() {
       $('#quit').click(function(e){
         e.preventDefault();
 		
+			location.reload();		
 		
       });
       
