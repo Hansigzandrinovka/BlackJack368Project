@@ -418,7 +418,7 @@ $( document ).ready(function() {
 
   var refreshQueue = [];
 
-  var refreshTimer = setInterval(processRefreshQueue, 500);
+  var refreshTimer = setInterval(processRefreshQueue, 400);
 
   function processRefreshQueue(){
     if(refreshQueue.length > 0){
@@ -731,22 +731,17 @@ function blackjackGame(){
   this.resolveGame = function(){
     var winners = this.getWinners();
     this.distributeWinnings((this.pot)/(winners.length), winners);
-	var temp = (this.pot) / (winners.length);
+    var winstring = '';
+    for(var i=0; i<winners.length; i++){
+      winstring += winners[i].name + " won $" + ((this.pot)/(winners.length)-winners[i].bet).toString() + ". ";
+    }
     this.pot = 0;
     this.collectDiscards();
 	
-	var winnerNames = [];
-	
-	for(var i = 0; i < winners.length; i++)
-	{
-		winnerNames.push(winners[i].name);
-	}
-	
-	console.log(this.deck.active.length + this.deck.discards.length);
     addRefresh({
       playerArray:copy(this.players),
       pot:0+(this.pot),
-      console_message:'Round over. ' + winnerNames.toString() + ' won $' + temp, //Add message indicating winner(s)
+      console_message:'Round over. ' + winstring,
       showCards:true,
       buttonsToShow:"continue" //need to add some kind of continue button to start a new round
     });
