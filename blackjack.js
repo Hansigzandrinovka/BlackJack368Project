@@ -155,8 +155,10 @@ $( document ).ready(function() {
 
       $('#BetButton').click(function(e){
         e.preventDefault();
-
-  		  game.setPlayerBet(num);
+		
+			
+  		  game.setPlayerBet(getPlayerBet());
+  		  
       });
 
       $('#nameButton').click(function(e){
@@ -164,8 +166,8 @@ $( document ).ready(function() {
         e.preventDefault();
 
      		$('h3').css('visibility', 'visible');
-
-     		$('#nameInputLine').css('visibility', 'hidden');
+     		
+      	$('#nameInputArea').css('visibility', 'hidden');
 
   			var player_name = getPlayerName();
 
@@ -355,6 +357,7 @@ $( document ).ready(function() {
 		$('#nameButton').css('visibility', 'visible');
       $('#nameInputLine').css('visibility', 'visible');
       $('h3').css('visibility', 'hidden');
+      $('#nameInputArea').css('visibility', 'visible');
 
     }
     else if(whatToShow == "continue"){
