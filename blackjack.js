@@ -939,6 +939,79 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 	
 	this.getAIBet = function() //determines what a given AI bets, as of present only returns 100, unless it doesn't have 100, in which case it returns what it has
 	{
+		if(this.isAI == "Pro")
+		{
+			if(this.getTotalAmount() < 10)
+			{
+				this.bet = 100;
+				
+				if(this.bet > this.banked)
+				{
+					this.bet = this.banked;
+				}
+				
+				return this.bet;
+			}
+			else if(this.getTotalAmount() >= 10)
+			{
+				this.bet = 500;
+				
+				if(this.bet > this.banked)
+				{
+					this.bet = this.banked;
+				}
+				
+				return this.bet;
+			}
+		}
+		else if(this.isAI == "Noob")
+		{
+			if(this.getTotalAmount() < 10)
+			{
+				this.bet = 500;
+				
+				if(this.bet > this.banked)
+				{
+					this.bet = this.banked;
+				}
+				
+				return this.bet;
+			}
+			else if(this.getTotalAmount() >= 10)
+			{
+				this.bet = 100;
+				
+				if(this.bet > this.banked)
+				{
+					this.bet = this.banked;
+				}
+				
+				return this.bet;
+			}
+		}
+		else if(this.isAI == "Random Guy")
+		{
+			//Get a random bet from 100 to 1000 in increments of 100
+			this.bet = (Math.floor((Math.random() * 10) + 1)) * 100;
+			
+			if(this.bet > this.banked)
+			{
+				this.bet = this.banked;
+			}
+			
+			return this.bet;
+		}
+		else if(this.isAI == "Dealer Wannabe")
+		{
+			this.bet = 100;
+			
+			if(this.bet > this.banked)
+			{
+				this.bet = this.banked;
+			}
+			return this.bet;
+		}
+		
 		if(100 > this.banked)
 		{
 			var temp = this.banked;
@@ -1134,7 +1207,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 				}
 				//If the next card in the deck wouldn't cause the AI to go over
 				else if(theDeck.lookAtCard() + endValue < 22)
-				{
+				{					
 					//Draw a card
 					card = theDeck.drawCards(1)[0];
 					//this.endValue += card.value;
