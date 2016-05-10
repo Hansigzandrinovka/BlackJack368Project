@@ -187,7 +187,7 @@ $( document ).ready(function() {
       $('#continue').click(function(e){
         e.preventDefault();
 		
-		game.resolveGame();
+		//game.resolveGame();
 		game.resetPlayers();
 		game.startGame();
 
@@ -496,8 +496,10 @@ function blackjackGame(){
   this.pot = 0;
 
   this.startGame = function(name){ //called when player clicks start button - every time game , it asks player to keep playing, which calls startGame method
-    //this.resetGame();
-
+    console.log(this.deck.active.length + this.deck.discards.length);
+	
+	//this.resetGame();
+	
     // this.getBets();
     // this.playTurns();
     // this.resolveGame();
@@ -642,7 +644,7 @@ function blackjackGame(){
       }
 
       if(i == this.players.length-1){
-        this.resolveGame();
+        //this.resolveGame();
       }
     }
   }
@@ -713,6 +715,8 @@ function blackjackGame(){
     this.distributeWinnings(this.pot/winners.length, winners);
     this.pot = 0;
     this.collectDiscards();
+	
+	console.log(this.deck.active.length + this.deck.discards.length);
     addRefresh({
       playerArray:copy(this.players),
       pot:0+this.pot,
@@ -725,7 +729,7 @@ function blackjackGame(){
   this.collectDiscards = function(){
     var discards = [];
     for(var i=0; i<this.players.length; i++){
-      discards.concat(this.players[i].getPlayerHand());
+      discards = discards.concat(this.players[i].getPlayerHand());
     }
     this.deck.returnCards(discards);
   };
