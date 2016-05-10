@@ -155,8 +155,10 @@ $( document ).ready(function() {
 
       $('#BetButton').click(function(e){ //
         e.preventDefault();
-
-  		  game.setPlayerBet(num);
+		
+			
+  		  game.setPlayerBet(getPlayerBet());
+  		  
       });
 
       $('#nameButton').click(function(e){
@@ -164,8 +166,9 @@ $( document ).ready(function() {
         e.preventDefault();
 
      		$('h3').css('visibility', 'visible');
-
-     		$('#nameInputLine').css('visibility', 'hidden');
+     		$('h4').css('visibility', 'visible');
+     		
+      	$('#nameInputArea').css('visibility', 'hidden');
 
   			var player_name = getPlayerName();
 
@@ -181,6 +184,7 @@ $( document ).ready(function() {
       $('#quit').click(function(e){
         e.preventDefault();
 		
+			location.reload();		
 		
       });
       
@@ -354,6 +358,7 @@ $( document ).ready(function() {
 		$('#nameButton').css('visibility', 'visible');
       $('#nameInputLine').css('visibility', 'visible');
       $('h3').css('visibility', 'hidden');
+      $('#nameInputArea').css('visibility', 'visible');
 
     }
     else if(whatToShow == "continue"){
@@ -429,7 +434,7 @@ $( document ).ready(function() {
 
   var exampleRefreshObj = {
     playerArray:copy(this.players),
-    pot:0+this.pot,
+    pot:0+(this.pot),
     console_message:"",
     showCards:true,
     buttonsToShow:"none"
@@ -528,7 +533,7 @@ function blackjackGame(){
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
       addRefresh({
         playerArray:copy(this.players),
-        pot:0+this.pot,
+        pot:0+(this.pot),
         console_message:'',
         showCards:true,
         buttonsToShow:"none"
@@ -536,7 +541,7 @@ function blackjackGame(){
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
       addRefresh({
         playerArray:copy(this.players),
-        pot:0+this.pot,
+        pot:0+(this.pot),
         console_message:'',
         showCards:true,
         buttonsToShow:"none"
@@ -555,7 +560,7 @@ function blackjackGame(){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){ //if actual player, ask them for bet and wait
         addRefresh({
           playerArray:copy(this.players),
-          pot:0+this.pot,
+          pot:0+(this.pot),
           console_message:this.players[i].name + ', please enter your bet.',
           showCards:true,
           buttonsToShow:"bet"
@@ -567,7 +572,7 @@ function blackjackGame(){
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
-          pot:0+this.pot,
+          pot:0+(this.pot),
           console_message:this.players[i].name + ' bets $' + this.players[i].bet + '.',
           showCards:true,
           buttonsToShow:"none"
@@ -591,7 +596,7 @@ function blackjackGame(){
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
-          pot:0+this.pot,
+          pot:0+(this.pot),
           console_message:'',
           showCards:true,
           buttonsToShow:"none"
@@ -609,7 +614,7 @@ function blackjackGame(){
         this.players[i].turnStatus = "inprogress";
         addRefresh({
           playerArray:copy(this.players),
-          pot:0+this.pot,
+          pot:0+(this.pot),
           console_message:'Your move, ' + this.players[i].name + '!',
           showCards:true,
           buttonsToShow:"play"
@@ -620,7 +625,7 @@ function blackjackGame(){
           this.players[i].turnStatus = "finished";
           addRefresh({
             playerArray:copy(this.players),
-            pot:0+this.pot,
+            pot:0+(this.pot),
             console_message:'',
             showCards:true,
             buttonsToShow:"none"
@@ -663,8 +668,8 @@ function blackjackGame(){
             this.players[i].turnStatus = "finished";
           }
           addRefresh({
-            playerArray:this.players,
-            pot:this.pot,
+            playerArray:copy(this.players),
+            pot:0+(this.pot),
             console_message:'',
             showCards:true,
             buttonsToShow:"play"
@@ -672,13 +677,13 @@ function blackjackGame(){
         }
 
         if(this.players[i].turnStatus === "finished"){
-          /*addRefresh({
-            playerArray:this.players,
-            pot:this.pot,
+          addRefresh({
+            playerArray:copy(this.players),
+            pot:0+(this.pot),
             console_message:'',
             showCards:true,
             buttonsToShow:"none"
-          });*/
+          });
           this.playTurns();
         }
         break;
@@ -719,7 +724,7 @@ function blackjackGame(){
 	console.log(this.deck.active.length + this.deck.discards.length);
     addRefresh({
       playerArray:copy(this.players),
-      pot:0+this.pot,
+      pot:0+(this.pot),
       console_message:'Round over.', //Add message indicating winner(s)
       showCards:true,
       buttonsToShow:"continue" //need to add some kind of continue button to start a new round
@@ -1112,7 +1117,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					//Refresh the game board
 					addRefresh({
 						playerArray:copy(gameObject.players),
-						pot:0+gameObject.pot,
+						pot:0+(gameObject.pot),
 						console_message:'',
 						showCards:true,
 						buttonsToShow:"none"
@@ -1171,7 +1176,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					//Refresh the game board
 					addRefresh({
 						playerArray:copy(gameObject.players),
-						pot:0+gameObject.pot,
+						pot:0+(gameObject.pot),
 						console_message:'',
 						showCards:true,
 						buttonsToShow:"none"
@@ -1215,7 +1220,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 				//Refresh the game board
 				addRefresh({
 					playerArray:copy(gameObject.players),
-					pot:0+gameObject.pot,
+					pot:0+(gameObject.pot),
 					console_message:'',
 					showCards:true,
 					buttonsToShow:"none"
@@ -1264,7 +1269,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 				//Refresh the game board
 				addRefresh({
 					playerArray:copy(gameObject.players),
-					pot:0+gameObject.pot,
+					pot:0+(gameObject.pot),
 					console_message:'',
 					showCards:true,
 					buttonsToShow:"none"

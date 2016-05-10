@@ -48,7 +48,7 @@
     	<col style="width: 33%" />
   		</colgroup>
 
- 		<tr>
+ 		<tr height="65">
     		<th id="money_player1">
     		<h3>
     		
@@ -60,7 +60,7 @@
     		</h3>
     		</th>
     		
-    		<th><h4 id = "Message">Messages Displayed here</h4></th>
+    		<th><h4 id = "Message"></h4></th>
     		
     		<th id="money_player5">
     		<h3>
@@ -90,7 +90,7 @@
     				<h3 id="money_pot" ></h3>  
     				
 					<span id = "nameInputLine">    				
-    				<form>
+    				<form id="nameInputArea">
 						<font size="5">Name: </font><input type="text" name="nameInput" id="nameInput" value="">
 					</form>
 					</span>
@@ -99,7 +99,7 @@
 				<button type="button" id = "nameButton">Start Game</button>
 				<br>
 				<button type="button" id = "continue">Continue</button>
-				<button type="button" id = "quit">Quit</button>
+				<button type="button" id = "quit">Start New Game</button>
 			
 			</th>
 				
@@ -203,7 +203,8 @@
     		<th>
 
 				<form>
-					<span id = "dollarSign"><font size="6">$</font></span><input type="number" name="BetAmount" id="BetAmount" value="0"><br>
+					<span id = "dollarSign"><font size="6">$</font></span>
+					<input type="number" name="BetAmount" id="BetAmount" value="0" min="0" step="100"><br>
 				</form>
 
 				<button type="button" id = "BetButton">Place Bet</button>
