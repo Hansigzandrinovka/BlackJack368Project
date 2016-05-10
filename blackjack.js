@@ -1017,11 +1017,21 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		return theCard;
 	};
 
+	//called when a player is reset as part of the game resetting (someone won, people lost money, etc.) - OPTIONAL: if a player is out of money, they are permanently busted
 	this.reset = function() //destroy card array, reset bet to 0
 	{
 		this.bet = 0;
 		this.cards = []; //Does NOT check if cards still in hand to return to deck
-		this.busted = false;
+		if(this.banked <= 0) //players that have gone over the limit for betting are permanently busted until they somehow gain money or the entire game starts again
+		{
+			this.banked = 0; //for negative number safety purposes
+			this.busted = true;
+		}
+		else
+		{
+			this.busted = false;
+		}
+		
 		this.turnStatus = "unplayed";
 		this.betPlaced = false;
 	};
