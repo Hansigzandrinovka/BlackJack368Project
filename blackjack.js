@@ -157,7 +157,7 @@ $( document ).ready(function() {
         e.preventDefault();
 		
 			
-  		  game.setPlayerBet(getPlayerBet());
+  		  game.setPlayerBet(parseInt(getPlayerBet()));
   		  
       });
 
@@ -567,7 +567,7 @@ function blackjackGame(){
         });
         break;
       } else if(this.players[i].isAI && !this.players[i].betPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
-        //this.players[i].setBet(null); //waiting for implementation
+        this.players[i].setBet(null); //waiting for implementation
         this.pot += this.players[i].getBet();
         this.players[i].betPlaced = true;
         addRefresh({
@@ -588,11 +588,11 @@ function blackjackGame(){
   this.setPlayerBet = function(bet){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
-        //this.players[i].setBet(bet);
+        this.players[i].setBet(bet);
 //Dummy info until setBet is written
-        this.players[i].bet = 100;
-        this.players[i].banked -= 100;
-        this.pot += 100;
+        //this.players[i].bet = 100;
+        //this.players[i].banked -= 100;
+        this.pot += bet;
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
@@ -696,12 +696,18 @@ function blackjackGame(){
   this.getWinners = function(){ //checks who is not busted, and determines who won
     var winners = [];
     var max = 0;
+    
     for(var i=0; i<this.players.length; i++){
+    	
       if(!this.players[i].busted){
+      	
         if(this.players[i].getTotalAmount() > max){
+        	
           winners = [this.players[i]];
           max = this.players[i].getTotalAmount();
+          
         } else if(this.players[i].getTotalAmount() == max){
+        	
           winners.push(this.players[i]);
         }
       }
@@ -717,8 +723,8 @@ function blackjackGame(){
 
   this.resolveGame = function(){
     var winners = this.getWinners();
-    this.distributeWinnings(this.pot/winners.length, winners);
-	var temp = this.pot;
+    this.distributeWinnings((this.pot)/(winners.length), winners);
+	var temp = (this.pot) / (winners.length);
     this.pot = 0;
     this.collectDiscards();
 	
@@ -747,9 +753,18 @@ function blackjackGame(){
     this.deck.returnCards(discards);
   };
 
-  this.distributeWinnings = function(amount, players){
+  this.distributeWinnings = function(amount, winners){
     for(var i=0; i<this.players.length; i++){
-      this.players[i].givePlayerMoney(amount);
+    	
+    	for(var j=0; j< winners.length;j++){
+    	
+			if(winners[j].name == this.players[i].name){
+			
+				this.players[i].givePlayerMoney(amount);
+			}    		
+    		
+    	}
+      
     }
   };
 }
