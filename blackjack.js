@@ -649,7 +649,7 @@ function blackjackGame(){
       }
 
       if(i == this.players.length-1){
-        //this.resolveGame();
+        this.resolveGame();
       }
     }
   }
