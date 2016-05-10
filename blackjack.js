@@ -1353,7 +1353,6 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 			//Get a random number that is either 1 or 2: 1 will continue the AI's turn, 2 will end it
 			var continueTurn = Math.floor((Math.random() * 2) + 1);
 
-			while(continueTurn == 1)
 			//While the AI's turn can continue
 			while(continueTurn == 1 && !this.busted)
 			{
