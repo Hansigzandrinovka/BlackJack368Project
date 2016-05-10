@@ -1055,7 +1055,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		//after running thru hand,
 		while(acesCount > 0) //check if most ideal to add ace as 1 or as 10
 		{
-			if((cardTotal + acesCount + 10) < 21) //if user can use ace as 10 without going over
+			if((cardTotal + 10) < 21) //if user can use ace as 10 without going over
 			{
 				cardTotal += 11;
 				acesCount --;
