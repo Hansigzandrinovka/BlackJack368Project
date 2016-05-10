@@ -142,18 +142,18 @@ $( document ).ready(function() {
       $('#HitMe').click(function(e){
         e.preventDefault();
 
-        game.makeMove('hit'); //or 'stand'
+        game.makeMove('hit'); //or 'stand', makes user draw a card
       });
 
       $('#Stay').click(function(e){
         e.preventDefault();
 
         //setButtons("bet");
-        game.makeMove('stand');
+        game.makeMove('stand'); //makes user forfeit remaining turns
       });
 
 
-      $('#BetButton').click(function(e){
+      $('#BetButton').click(function(e){ //
         e.preventDefault();
 
   		  game.setPlayerBet(num);
@@ -552,7 +552,7 @@ function blackjackGame(){
 
   this.getBets = function(){ //polls all players for the amount they want to bet for this game, taking the money from the players
     for(var i=0; i<this.players.length; i++){
-      if(this.players[i].isAI === null && !this.players[i].betPlaced){
+      if(this.players[i].isAI === null && !this.players[i].betPlaced){ //if actual player, ask them for bet and wait
         addRefresh({
           playerArray:copy(this.players),
           pot:0+this.pot,
@@ -561,7 +561,7 @@ function blackjackGame(){
           buttonsToShow:"bet"
         });
         break;
-      } else if(this.players[i].isAI && !this.players[i].betPlaced){
+      } else if(this.players[i].isAI && !this.players[i].betPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
         //this.players[i].setBet(null); //waiting for implementation
         this.pot += this.players[i].getBet();
         this.players[i].betPlaced = true;
@@ -882,12 +882,15 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		return this.bet;
 	}
 	
+	//input: the amount to bet, or null
+	//output: the amount the game thinks the user is betting
+	//if player is AI, grabs and tries to return AI bet amount. Else tries to make current amount player bet amount and return it, returns 0 if failed
 	this.setBet = function(amount) //if player is  AI, asks AI for bet amount, else if amount given, try to set to amount, else set to 0
 	{
 		var betAmount = 0;
 		if(this.isAI != null) //if player is an AI
 		{
-			betAmount = this.setBetAI();
+			betAmount = this.getAIBet();//    CALL to AI function to return amount AI bets
 			this.betPlaced = true;
 		}
 		else if(amount != undefined) //player not AI, and parameter amount was given
@@ -906,17 +909,17 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		return betAmount;
 	}
 	
-	this.getAIBet = function()
+	this.getAIBet = function() //determines what a given AI bets, as of present only returns 100, unless it doesn't have 100, in which case it returns what it has
 	{
 		if(100 > this.banked)
 		{
 			var temp = this.banked;
-			this.banked = 0;
+			//this.banked = 0; //removing banked amount is handled by player setBet method
 			return temp;
 		}
 		else
 		{
-			this.banked -= 100;
+			//this.banked -= 100;
 			return 100;
 		}
 	}
