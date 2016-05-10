@@ -156,8 +156,15 @@ $( document ).ready(function() {
       $('#BetButton').click(function(e){ //
         e.preventDefault();
 		
+			$('#dollarSign').css('visibility', 'hidden');
+      $('#BetAmount').css('visibility', 'hidden');			
+			$('#BetButton').css('visibility', 'hidden');
+  		  $('#BetAmount').val(100);			
 			
   		  game.setPlayerBet(parseInt(getPlayerBet()));
+  		  
+  		  
+  		  
   		  
       });
 
@@ -168,8 +175,10 @@ $( document ).ready(function() {
      		$('h3').css('visibility', 'visible');
      		$('h4').css('visibility', 'visible');
      		
-      	$('#nameInputArea').css('visibility', 'hidden');
-
+      	$('#nameInputArea').css('display', 'none');
+      	$('#nameButton').css('display', 'none');
+      	
+      	
   			var player_name = getPlayerName();
 
   			var players = [["AI1","Pro",10000,game],["AI2","Noob",10000,game],[player_name,null,10000,game],["AI3","Random Guy",10000,game],["AI4","Dealer Wannabe",10000,game]];
@@ -397,7 +406,6 @@ $( document ).ready(function() {
 	function getPlayerBet(){
 
   		var bet = $('#BetAmount').val();
-  		$('#BetAmount').val(0);
 
   		return bet;
 	}
