@@ -984,7 +984,7 @@ function Deck(){
 
     if(this.active.length < 52)
     {
-    	this.active.concat(this.discards);
+      debugger;
     	this.shuffle();
     }
 
@@ -1027,8 +1027,10 @@ function Deck(){
 //http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array-in-javascript
   this.shuffle = function(){
     var j, x, i;
-    this.active.concat(this.discard);
-    this.discard = [];
+    var copy1 = copy(this.active);
+    var copy2 = copy(this.discards);
+    this.active = copy1.concat(copy2);
+    this.discards = [];
     var a = this.active;
     for (i = a.length; i; i -= 1) {
         j = Math.floor(Math.random() * i);
@@ -1716,9 +1718,16 @@ this.turnStatus = "inprogress"; // "unplayed", "inprogress", "finished"
 
 // Tests
 
-for(var i = 0; i < game.players.length; i++)
-{
-	console.log(game.players[i].name);
-}
 
 */
+
+var testdeck = new Deck();
+testdeck.initDeck();
+var count =0;
+for(var i = 0; i < 2000; i++)
+{
+  count++;
+  var card = testdeck.drawCards(1);
+  testdeck.returnCards(card);
+	if(i % 52 == 0){console.log("active length: " + testdeck.active.length.toString() + " discards length: " + testdeck.discards.length.toString() + " total length: " + (testdeck.active.length+testdeck.discards.length).toString() + " cards drawn: " + count.toString())};
+}
