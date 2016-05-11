@@ -216,6 +216,7 @@ $( document ).ready(function() {
 		
 			$('#call').css('visibility', 'hidden');
 			$('#fold').css('visibility', 'hidden');
+      game.setPlayerCall('call');
 			
 			//do something else
       });
@@ -225,7 +226,7 @@ $( document ).ready(function() {
 		
 			$('#call').css('visibility', 'hidden');
 			$('#fold').css('visibility', 'hidden');
-			
+			game.setPlayerCall('fold');
 			//do something else
 		
       });
@@ -518,8 +519,6 @@ $( document ).ready(function() {
 
   function processRefreshQueue(){
     if(refreshQueue.length > 0){
-      //debugger;
-      console.log("calling refresh");
       refreshScreen(refreshQueue.shift());
     }
   }
@@ -615,6 +614,7 @@ function blackjackGame(){
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
+    this.maxbet = 0;
     this.startGame();
   };
 
@@ -712,7 +712,7 @@ function blackjackGame(){
   //need call/fold buttons
   //if player had the max bet, do we interact with player? Sure. Ea
   
-  this.getCalls = function(call){
+  this.getCalls = function(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].callPlaced){
         addRefresh({
@@ -720,13 +720,14 @@ function blackjackGame(){
           pot:0+(this.pot),
           console_message:this.players[i].name + ', the bet is $' + this.maxbet + ', do you want to call or fold?',
           showCards:true,
-          buttonsToShow:"none"
+          buttonsToShow:"call"
         });
         break;
       } else if(this.players[i].isAI && !this.players[i].callPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
         //this.players[i].setCall(null); //needs to set folded attribute
-        //right now, AIs always call
+        //right now, dummy code for AIs always call
         
+        this.players[i].bet = this.maxbet;
         this.players[i].callPlaced = true;
         var callstring = "";
         if(this.players[i].folded){
@@ -742,9 +743,22 @@ function blackjackGame(){
           showCards:true,
           buttonsToShow:"none"
         });
-      } else if(call){
+      } 
+      
+      if(i == this.players.length-1){
+        this.playTurns();
+      }
+    }
+  };
+  
+  this.setPlayerCall = function(call){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && !this.players[i].callPlaced){
+        
         if(call === "fold"){
           this.players[i].folded = true;
+        } else {
+          this.players[i].bet = this.maxbet;
         }
 
         this.players[i].callPlaced = true;
@@ -763,13 +777,10 @@ function blackjackGame(){
           buttonsToShow:"none"
         });
         this.getCalls();
-      }
-      
-      if(i == this.players.length-1){
-        this.playTurns();
+        break;
       }
     }
-  };
+  }
 //need to deal with skipping over players who folded
   this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
