@@ -253,6 +253,8 @@ $( document ).ready(function() {
       
   });
 
+  //adds card to display, displaying correct side depending on player
+  //takes in value and suit of card, player card owned by, and some other parameters
   function addCard(num,suit,player,numCard,showCards,points){
 
       var cardUrl = getCard(num,suit);
@@ -546,7 +548,7 @@ $( document ).ready(function() {
 
   var refreshTimer = setInterval(processRefreshQueue, 400);
 
-  function processRefreshQueue(){
+  function processRefreshQueue(){ //operates queue of refreshes to refresh one time per Interval (currently 400 ms)
     if(refreshQueue.length > 0){
       refreshScreen(refreshQueue.shift());
     }
@@ -556,7 +558,7 @@ $( document ).ready(function() {
     refreshQueue.push(refresh);
   }
 
-  function liveRefresh(refresh){
+  function liveRefresh(refresh){ //tries to refresh immediately unless a refresh is queued
     if(refreshQueue.length > 0){
       addRefresh(refresh);
     } else {
@@ -564,7 +566,7 @@ $( document ).ready(function() {
     }
   }
 
-  function refreshScreen(refreshObj){
+  function refreshScreen(refreshObj){ //redraws entire screen given new display data
 
     if(typeof refreshObj.console_message === 'undefined' || refreshObj.console_message==null){changeMessage("");}
     else{changeMessage(refreshObj.console_message);}
@@ -608,24 +610,24 @@ function copy(o) {
    return output;
 }
 
-function blackjackGame(){
+function blackjackGame(){ //the main class for game operations (as opposed to the players, the display)
   //Requirements for using the game object:
   //create a new game object (e.g. game); call game.initGame() on the object, passing in player definitions; call game.deck.initDeck().
   this.deck = new Deck();
   this.players = [];
   this.maxbet = 0;
-  this.initGame = function(playerDefs){
+  this.initGame = function(playerDefs){ //initializes players (and possibly the deck)
     //exactly 5 players are required
     this.initPlayers(playerDefs);
   };
 
-  this.initPlayers = function(playerDefs){
+  this.initPlayers = function(playerDefs){ //builds players array out of given 2d array of parameters for player constructor
     for(var i=0; i<playerDefs.length; i++){
       this.players.push(new Player(playerDefs[i][0], playerDefs[i][1], playerDefs[i][2], playerDefs[i][3]));
     }
   };
 
-  this.pot = 0;
+  this.pot = 0; //holds amount of money to divide amongst winners after a given game
 
   this.startGame = function(name){ //called when player clicks start button - every time game , it asks player to keep playing, which calls startGame method
 
@@ -661,7 +663,7 @@ function blackjackGame(){
     }
   };
 
-  this.resetPlayers = function(){
+  this.resetPlayers = function(){ //resets all players' hands and bids to before-game, thus allowing game to continue
     for(var i=0; i<this.players.length; i++){
       this.players[i].reset();  //each player needs a reset method that empties out player hand and resets bet stat to 0
     }
@@ -697,7 +699,8 @@ function blackjackGame(){
     }
   }
   
-  this.getMaxBet = function(){
+  //called by getBets
+  this.getMaxBet = function(){ //polls all players for their bets, then returns maximum amount bet
     max = 0;
     for(var i=0; i<this.players.length; i++){
         if(this.players[i].bet > max){
@@ -707,7 +710,8 @@ function blackjackGame(){
     return max;
   };
 
-  this.setPlayerBet = function(bet){
+  //called by a button press
+  this.setPlayerBet = function(bet){ //finds the first non-AI player that has not set bet, and sets their bet to given amount
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
         this.players[i].setBet(bet);
@@ -732,9 +736,11 @@ function blackjackGame(){
   //need call/fold buttons
   //if player had the max bet, do we interact with player? Sure. Ea
   
+  //runs AI betting in turn order, then stops at first human player to not place bet
+  //after bets are placed, turn is played
   this.getCalls = function(){
     for(var i=0; i<this.players.length; i++){
-      if(this.players[i].isAI === null && !this.players[i].callPlaced){
+      if(this.players[i].isAI === null && !this.players[i].callPlaced){ //human players are told to bet, then game waits
         addRefresh({
           playerArray:copy(this.players),
           pot:0+(this.pot),
@@ -771,6 +777,7 @@ function blackjackGame(){
     }
   };
   
+  //finds first human player, and sets their call response to param given, then tries to get rest of calls
   this.setPlayerCall = function(call){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].callPlaced){
@@ -798,10 +805,10 @@ function blackjackGame(){
       }
     }
   }
-//need to deal with skipping over players who folded
+//performs AI turn operations until it reaches human player that hasn't played, notifies them, then exit
   this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
-      if(this.players[i].isAI === null && this.players[i].turnStatus === "unplayed"){
+      if((this.players[i].isAI === null && this.players[i].turnStatus === "unplayed") && (this.players[i].folded == false)){
         //Is the player human? Exit and wait for input.
         this.players[i].turnStatus = "inprogress";
         addRefresh({
@@ -812,7 +819,7 @@ function blackjackGame(){
           buttonsToShow:"play"
         });
         break;
-      } else if(this.players[i].isAI !== null && this.players[i].turnStatus === "unplayed"){
+      } else if((this.players[i].isAI !== null && this.players[i].turnStatus === "unplayed") && (this.players[i].folded == false)){
           this.players[i].playTurn();
           this.players[i].turnStatus = "finished";
           addRefresh({
@@ -824,13 +831,14 @@ function blackjackGame(){
           });
       }
 
-      if(i == this.players.length-1){
+      if(i == this.players.length-1){ //once we have tested all players, resolve game
         this.resolveGame();
       }
     }
   }
 
-  this.makeMove = function(move){
+  //called by button
+  this.makeMove = function(move){ //finds first human player to not play (and hasn't folded), performs move (stand,hit) for them, then proceeds with turn order
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && this.players[i].turnStatus === "inprogress"){
         if(move == 'stand'){ //player waits for round to end
@@ -868,15 +876,23 @@ function blackjackGame(){
     }
   }
 
-  this.getWinners = function(){ //checks who is not busted, and determines who won
+  //called by resolveGame
+  this.getWinners = function(){ //checks who is not busted and who is not folded, and determines who won
+    var participants = this.players; //tracks who is actually playing game (not folded)
     var winners = [];
     var max = 0;
-    
-    for(var i=0; i<this.players.length; i++){
-    	
-      if(!this.players[i].busted){
+	
+    for(var i=0; i<this.participants.length; i++){
+      /*if(this.participants[i].folded) //if player should not be a victor, and should be excluded from further evaluations
+		{
+			participants = (this.participants.splice(0,i) + this.participants.splice(i + 1,this.participants.length));
+			//***NTS*** may not be supposed to use splice method, trying to grab everything but the folded person ***
+			j--; //step back one (will step forward afterwards because of for loop)
+			//rebuilds the participants array around the given folded player so they are ignored
+		}*/
+      /*else*/if((!this.participants[i].busted)){ //if player could feasibly win this game *ignores folded players*
       	
-        if(this.players[i].getTotalAmount() > max){
+        if(this.participants[i].getTotalAmount() > max){
         	
           winners = [this.players[i]];
           max = this.players[i].getTotalAmount();
@@ -890,12 +906,13 @@ function blackjackGame(){
 
     if(max === 0){
       //All players were busted, so everyone splits the pot
-      return this.players;
+      return this.participants; //Not all players were playing, so only give to those that were
     } else {
       return winners;
     }
   };
 
+  
   this.resolveGame = function(){
     var winners = this.getWinners();
     this.distributeWinnings((this.pot)/(winners.length), winners);
@@ -915,6 +932,7 @@ function blackjackGame(){
     });
   };
 
+  //collects all cards from players, and rebuilds deck
   this.collectDiscards = function(){
     var discards = [];
     for(var i=0; i<this.players.length; i++){
@@ -923,6 +941,7 @@ function blackjackGame(){
     this.deck.returnCards(discards);
   };
 
+  //divides amount evenly among winners
   this.distributeWinnings = function(amount, winners){
     for(var i=0; i<this.players.length; i++){
     	
@@ -957,7 +976,7 @@ function Deck(){
   this.discards = [];
 
   this.drawCards = function(num){
-    var top = this.active.splice(0,num);
+    var top = this.active.splice(0,num); //takes first num cards (starting at 0, taking to (num - 1)
 
     if(this.active.length < 52)
     {
