@@ -60,7 +60,7 @@
     		</h3>
     		</th>
     		
-    		<th><h4 id = "Message"></h4></th>
+    		<th><h4 id = "Message">Enter the names of any players:</h4></th>
     		
     		<th id="money_player5" style="vertical-align:bottom;text-align:center;">
     		<h3>
@@ -85,18 +85,42 @@
   		</colgroup>
 
   		<tr height = "115">
-    		<th id = "computer1"></th>
+    		<th id = "player1"></th>
     		<th>
     				<h3 id="money_pot" ></h3>  
     				
-					<span id = "nameInputLine">    				
-    				<form id="nameInputArea">
-						<font size="5">Name: </font><input type="text" name="nameInput" id="nameInput" value="">
+					<span>    				
+    				<form>
+						<h5>Player 1 name: <input type="text" name="nameInput" id="human1" value=""></h5>
+					</form>
+					</span>
+					
+					<span>   				
+    				<form>
+						<h5>Player 2 name: <input type="text" name="nameInput" id="human2" value=""></h5>
+					</form>
+					</span>
+					
+					<span>    				
+    				<form>
+						<h5>Player 3 name: <input type="text" name="nameInput" id="human3" value=""></h5>
+					</form>
+					</span>
+					
+					<span>    				
+    				<form>
+						<h5>Player 4 name: <input type="text" name="nameInput" id="human4" value=""></h5>
+					</form>
+					</span>
+					
+					<span>    				
+    				<form>
+						<h5>Player 5 name: <input type="text" name="nameInput" id="human5" value=""></h5>
 					</form>
 					</span>
 					
 				<br>
-				<button type="button" id = "nameButton">Start Game</button>
+				<button type="button" id = "startButton">Start Game</button>
 				<br>
 				<button type="button" id = "continue">Continue</button>
 				<button type="button" id = "quit">Start New Game</button>
@@ -104,7 +128,7 @@
 			</th>
 				
 				
-    		<th id = "computer2"></th>
+    		<th id = "player5"></th>
 
   		</tr>
 
@@ -154,9 +178,9 @@
   		</colgroup>
 
  		<tr height = "115">
-    		<th id ="computer3"></th>
+    		<th id ="player2"></th>
     		<th></th>
-    		<th id ="computer4"></th>
+    		<th id ="player4"></th>
   		</tr>
 
  	</table>
@@ -207,11 +231,14 @@
 				</form>
 
 				<button type="button" id = "BetButton">Place Bet</button>
+				<br>
+				<button type="button" id = "Call" >Call</button>
+				<button type="button" id = "Fold" >Fold</button>
 
 
     		</th>
 
-    		<th id = "human_player"></th>
+    		<th id = "player3"></th>
 
     		<th>
     			<button type="button" id = "HitMe" >Hit Me</button>

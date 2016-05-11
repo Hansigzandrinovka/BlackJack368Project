@@ -19,11 +19,14 @@ h4 {
 
 	font-size:30px;
 	color: red;
+	visibility:visible;
 }
 
 h3{
 	vertical-align:top;
 	font-size: 20px;
+	visibility: hidden;
+	display:none;
 	
 }
 
@@ -31,7 +34,15 @@ h3,h4{
 	margin:0;
 	padding:0;
 	
-	visibility: hidden;
+}
+
+h5{
+
+	visibility:visible;
+	font-size:20px;
+	margin:5px;
+	padding:0;
+
 }
 
 button {
