@@ -36,7 +36,7 @@ var cards = [
         "Cards/7_of_diamonds.png",
         "Cards/8_of_diamonds.png",
         "Cards/9_of_diamonds.png",
-        "Cards/9_of_diamonds.png",
+        "Cards/10_of_diamonds.png",
         "Cards/jack_of_diamonds.png",
         "Cards/queen_of_diamonds.png",
         "Cards/king_of_diamonds.png",
@@ -379,6 +379,14 @@ $( document ).ready(function() {
     	}
   }
   
+  function setFolded(player_id,isThePlayerFoldeded){ //sets the display for whether the player has busted or not
+
+		if(isThePlayerFoldeded){
+
+      	$('#money_'+player_id).find('span.busted').html("  Folded!");
+    	}
+  }
+  
   function setPoints(player_id,amount){ //displays the amount of points for the player
     		
   		$('#money_'+player_id).find('span.points').html(" " + amount.toString());
@@ -584,6 +592,10 @@ $( document ).ready(function() {
       changeMoney(player_id,refreshObj.playerArray[i].banked);
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
+      
+      if(!refreshObj.playerArray[i].busted){
+		      setFolded(player_id,refreshObj.playerArray[i].folded);
+      }
       
       setPoints( player_id,"");
      
@@ -1229,7 +1241,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		var AICall = true;
 		if(this.isAI != null) 
 		{
-			//AICall = this.getAICall(amount); //should return true or false
+			AICall = this.getAICall(amount); //should return true or false
       if(!AICall || ((amount - this.bet) > this.banked))
       {
         this.folded = true;
@@ -1644,7 +1656,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		}
 		else if(this.isAI == "Noob")
 		{
-			if(this.getTotalAmount() < 10)
+			if(this.getTotalAmount() >= 14)
 			{
 				return true;
 			}
