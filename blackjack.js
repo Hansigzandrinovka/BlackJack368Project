@@ -677,7 +677,6 @@ function blackjackGame(){
         break;
       } else if(this.players[i].isAI && !this.players[i].betPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
         this.players[i].setBet(null); //waiting for implementation
-        this.pot += this.players[i].getBet();
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
@@ -709,7 +708,6 @@ function blackjackGame(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
         this.players[i].setBet(bet);
-        this.pot += bet;
         this.players[i].betPlaced = true;
         addRefresh({
           playerArray:copy(this.players),
@@ -743,11 +741,11 @@ function blackjackGame(){
         });
         break;
       } else if(this.players[i].isAI && !this.players[i].callPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
-        //this.players[i].setCall(null); //needs to set folded attribute
-        //right now, dummy code for AIs always call
+        this.players[i].setCall(this.maxbet,null); //needs to set folded attribute
+        if(!this.players[i].folded){
+          this.pot += this.players[i].getBet();
+        }
         
-        this.players[i].bet = this.maxbet;
-        this.players[i].callPlaced = true;
         var callstring = "";
         if(this.players[i].folded){
           callstring = " folds.";
@@ -773,14 +771,11 @@ function blackjackGame(){
   this.setPlayerCall = function(call){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].callPlaced){
-        
-        if(call === "fold"){
-          this.players[i].folded = true;
-        } else {
-          this.players[i].bet = this.maxbet;
-        }
 
-        this.players[i].callPlaced = true;
+        this.players[i].setCall(this.maxbet, call);
+        if(!this.players[i].folded){
+          this.pot += this.players[i].getBet();
+        }
         
         var callstring = "";
         if(this.players[i].folded){
@@ -1196,6 +1191,35 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 			//this.banked -= 100;
 			return 100;
 		}
+	}
+  
+  this.setCall = function(amount,call)
+  //Assumes setBet() has already modified player values.
+  {
+		var AICall = true;
+		if(this.isAI != null) 
+		{
+			//AICall = this.getAICall(amount); //should return true or false
+      if(!AICall || ((amount - this.bet) > this.banked))
+      {
+        this.folded = true;
+        this.bet = 0;
+      } else 
+      {
+        this.banked -= (amount - this.bet);
+        this.bet = amount;
+      }
+		}
+		else if(call === "fold" || ((amount - this.bet) > this.banked)) 
+		{
+			this.folded = true;
+      this.bet = 0;
+		} else 
+    {
+      this.banked -= (amount - this.bet);
+      this.bet = amount;
+    }
+    this.callPlaced = true;
 	}
 
 	//output: numerical sum of point values for each card in player's hand (found through logic applied to cards)
