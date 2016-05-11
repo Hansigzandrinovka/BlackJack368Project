@@ -263,6 +263,8 @@ $( document ).ready(function() {
       if(showCards == "all"){
       	
       	image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+      	
+      	$("#money_"+player).find('span.points').html(points.toString());
       }
       else{
       
@@ -278,7 +280,7 @@ $( document ).ready(function() {
       
       $("#"+player).append(image);
       
-      if(player == ("player" + (showCards+1).toString())){
+      if(player == ("player" + (showCards+1).toString()) && numCard!=0){
       	
       	$("#"+player).find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
          $("#"+player).find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
@@ -594,7 +596,8 @@ $( document ).ready(function() {
 
 ////// Game logic
 
-//Need to find citation from stackoverflow for this, not sure where I got it
+// found this function from http://stackoverflow.com/questions/7486085/copying-array-by-value-in-javascript
+// makes a deep copy of an object
 function copy(o) {
    var output, v, key;
    output = Array.isArray(o) ? [] : {};
