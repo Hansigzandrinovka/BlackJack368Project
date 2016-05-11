@@ -232,7 +232,7 @@ $( document ).ready(function() {
       
   });
 
-  function addCard(num,suit,player,numCard,showCards){
+  function addCard(num,suit,player,numCard,showCards,points){
 
       var cardUrl = getCard(num,suit);
 
@@ -261,6 +261,8 @@ $( document ).ready(function() {
       	
       	$("#"+player).find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
          $("#"+player).find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
+         
+         $("#money_"+player).find('span.points').html(points.toString());
       	
       }
       
@@ -560,10 +562,12 @@ $( document ).ready(function() {
       changeMoney(player_id,refreshObj.playerArray[i].banked);
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
-      setPoints( player_id,refreshObj.playerArray[i].getTotalAmount());
-
+      
+      setPoints( player_id,"");
+     
+		var points = refreshObj.playerArray[i].getTotalAmount();
       for(var j=0; j<refreshObj.playerArray[i].cards.length;j++){
-        addCard(refreshObj.playerArray[i].cards[j].value, refreshObj.playerArray[i].cards[j].suit, player_id, j, refreshObj.showCards)
+        addCard(refreshObj.playerArray[i].cards[j].value, refreshObj.playerArray[i].cards[j].suit, player_id, j, refreshObj.showCards,points)
       }
 
     }
