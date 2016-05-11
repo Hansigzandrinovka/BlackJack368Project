@@ -806,6 +806,7 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
     }
   }
 //performs AI turn operations until it reaches human player that hasn't played, notifies them, then exit
+//called by makeMove, getCalls
   this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
       if((this.players[i].isAI === null && this.players[i].turnStatus === "unplayed") && (this.players[i].folded == false)){
@@ -912,7 +913,8 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
     }
   };
 
-  
+  //gets winners, gives them payout, displays, puts discards into deck
+  //called by playTurns
   this.resolveGame = function(){
     var winners = this.getWinners();
     this.distributeWinnings((this.pot)/(winners.length), winners);
@@ -933,6 +935,7 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
   };
 
   //collects all cards from players, and rebuilds deck
+  //called by resolveGame
   this.collectDiscards = function(){
     var discards = [];
     for(var i=0; i<this.players.length; i++){
@@ -975,6 +978,7 @@ function Deck(){
 
   this.discards = [];
 
+//takes top num cards from deck and returns them after removing them from top
   this.drawCards = function(num){
     var top = this.active.splice(0,num); //takes first num cards (starting at 0, taking to (num - 1)
 
@@ -987,6 +991,7 @@ function Deck(){
     return top;
   };
 
+//returns the max possible value for the card at the top of the deck (ace always gives 11)
   this.lookAtCard = function(){
   	//Get the top card from the deck
 	var top = this.active[0];
@@ -1011,6 +1016,7 @@ function Deck(){
 	}
   }
 
+//called by blackjackGame.collectDiscards
   this.returnCards = function(cards){ //returns cards to discard pile
     for(var i=0; i<cards.length; i++){
       this.discards.push(cards[i]);
