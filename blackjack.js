@@ -1601,6 +1601,49 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 			console.log(endValue);
 		}
 	};
+	
+	this.getAICall = function()
+	{
+		if(this.isAI == "Pro")
+		{
+			if(this.getTotalAmount() >= 10)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if(this.isAI == "Noob")
+		{
+			if(this.getTotalAmount() < 10)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if(this.isAI == "Dealer Wannabe")
+		{
+			return true;
+		}
+		elwse if(this.isAI == "Random Guy")
+		{
+			var call = Math.floor((Math.random() * 2) + 1);
+			
+			if(call == 1)
+			{
+				return true;
+			}
+			else if(call == 2)
+			{
+				return false;
+			}
+		}
+	}
 }
 
 /*
