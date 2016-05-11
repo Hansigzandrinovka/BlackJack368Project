@@ -1271,7 +1271,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 	{
 		if(theCard !== null) //checks if user is supplying something
 		{
-			if(theCard.suite !== null) //checks if user is supplying a card
+			if(theCard.suit !== null) //checks if user is supplying a card
 			{
 				this.cards.push(theCard); //if so, add the card
 			}
