@@ -159,11 +159,11 @@ $( document ).ready(function() {
 			$('#dollarSign').css('visibility', 'hidden');
       $('#BetAmount').css('visibility', 'hidden');			
 			$('#BetButton').css('visibility', 'hidden');
-  		  $('#BetAmount').val(100);			
+  		  			
 			
   		  game.setPlayerBet(parseInt(getPlayerBet()));
   		  
-  		  
+  		  $('#BetAmount').val(100);
   		  
   		  
       });
@@ -589,7 +589,7 @@ $( document ).ready(function() {
 
       var player_id = "player" + (i+1).toString();
 
-      changeMoney(player_id,refreshObj.playerArray[i].banked);
+      changeMoney(player_id,Math.floor(refreshObj.playerArray[i].banked));
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
       
@@ -964,7 +964,7 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
     	
 			if(winners[j].name == this.players[i].name){
 			
-				this.players[i].givePlayerMoney(Math.floor(amount));
+				this.players[i].givePlayerMoney(amount);
 			}    		
     		
     	}
