@@ -1324,6 +1324,8 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		
 		this.turnStatus = "unplayed";
 		this.betPlaced = false;
+    this.callPlaced = false;
+    this.folded = false;
 	};
 
 	//input: an index to poll
