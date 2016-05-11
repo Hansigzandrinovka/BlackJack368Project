@@ -263,6 +263,8 @@ $( document ).ready(function() {
       if(showCards == "all"){
       	
       	image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+      	
+      	$("#money_"+player).find('span.points').html(points.toString());
       }
       else{
       
