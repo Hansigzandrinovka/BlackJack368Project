@@ -172,6 +172,9 @@ $( document ).ready(function() {
 
         	e.preventDefault();
 			
+			var player_names = getPlayerNames();
+			console.log(player_names);			
+			
 			//aesthetic changes to page
      		$('h3').css('display', 'block');
      		$('h3').css('visibility', 'visible');
@@ -182,10 +185,27 @@ $( document ).ready(function() {
       	
       	
       	//start the game
-  			var player_names = getPlayerNames(); //use this to get player names from the first page
-
-  			var players = [["AI1","Pro",10000,game],["AI2","Noob",10000,game],["jimmy",null,10000,game],["AI3","Random Guy",10000,game],["AI4","Dealer Wannabe",10000,game]];
+  			 //use this to get player names from the first page
+			
+			var AIarray = [["Phil Ivey","Pro",10000,game],["SpongeBob","Noob",10000,game],["Matt Damon","Pro",10000,game],["Batman","Random Guy",10000,game],["Barack Obama","Dealer Wannabe",10000,game]];
 	
+			var players = [];
+			
+			for(var i =0;i<5;i++){
+			
+				if(player_names[i] != ""){
+				
+					players.push([player_names[i],null,10000,game]);			
+				}			
+				else{
+					
+					players.push(AIarray[i]);
+				}
+			
+			}			
+			
+			console.log(players);
+			
   			game.initGame(players);
   			
   			//setBusted("player1",true);
@@ -481,7 +501,7 @@ $( document ).ready(function() {
 		
 		var player_names = []; //used to store player names
 		
-				
+		/*		
 		if($('#human1').val() != "" ){ //if the text field is not empty
 		
 			player_names.push($('#human1').val()); //add the player name to the array
@@ -502,6 +522,13 @@ $( document ).ready(function() {
 		
 			player_names.push($('#human5').val());
 		}
+		*/		
+		
+		player_names.push($('#human1').val());
+		player_names.push($('#human2').val());
+		player_names.push($('#human3').val());
+		player_names.push($('#human4').val());
+		player_names.push($('#human5').val());
 		
   		$('#human1').val("");
   		$('#human2').val("");
