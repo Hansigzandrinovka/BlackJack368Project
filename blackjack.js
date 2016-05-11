@@ -1207,6 +1207,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
       {
         this.folded = true;
         this.bet = 0;
+        this.turnStatus = "finished"
       } else 
       {
         this.banked -= (amount - this.bet);
@@ -1217,6 +1218,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		{
 			this.folded = true;
       this.bet = 0;
+      this.turnStatus = "finished"
 		} else 
     {
       this.banked -= (amount - this.bet);
