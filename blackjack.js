@@ -217,7 +217,37 @@ $( document ).ready(function() {
       var cardUrl = getCard(num,suit);
 
       var image = "";
+      
+      
+      if(showCards == "all"){
+      	
+      	image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+      }
+      else{
+      
+      	if(numCard == 0 ){
 
+          	image = "<img src='" + cardUrl + "' width='70' height='105' border='2'>";
+        	}
+        	else{
+        		
+          	image = "<img src='Cards/card_back.png' width='70' height='105' border='2'>";
+        	}
+      }
+      
+      $("#"+player).append(image);
+      
+      if(player == "player" + (showCards+1).toString()){
+      	
+      	$("#"+player).find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
+         $("#"+player).find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
+      	
+      }
+      
+      
+
+
+/*
       if(!showCards){
 
         if(numCard == 0 ){
@@ -259,16 +289,17 @@ $( document ).ready(function() {
 
           $('#computer4').append(image);
       }
+ */     
   }
 
   function clearBoard(){ //clears the board of all cards
 
 
-    $('#human_player').find('img').remove();
-    $('#computer1').find('img').remove();
-    $('#computer2').find('img').remove();
-    $('#computer3').find('img').remove();
-    $('#computer4').find('img').remove();
+    $('#player1').find('img').remove();
+    $('#player2').find('img').remove();
+    $('#player3').find('img').remove();
+    $('#player4').find('img').remove();
+    $('#player5').find('img').remove();
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
