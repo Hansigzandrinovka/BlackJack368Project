@@ -379,6 +379,14 @@ $( document ).ready(function() {
     	}
   }
   
+  function setFolded(player_id,isThePlayerFoldeded){ //sets the display for whether the player has busted or not
+
+		if(isThePlayerFoldeded){
+
+      	$('#money_'+player_id).find('span.busted').html("  Folded!");
+    	}
+  }
+  
   function setPoints(player_id,amount){ //displays the amount of points for the player
     		
   		$('#money_'+player_id).find('span.points').html(" " + amount.toString());
@@ -584,6 +592,10 @@ $( document ).ready(function() {
       changeMoney(player_id,refreshObj.playerArray[i].banked);
       setPlayerName(player_id,refreshObj.playerArray[i].name);
       setBusted(player_id,refreshObj.playerArray[i].busted);
+      
+      if(!refreshObj.playerArray[i].busted){
+		      setFolded(player_id,refreshObj.playerArray[i].folded);
+      }
       
       setPoints( player_id,"");
      
