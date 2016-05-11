@@ -278,7 +278,7 @@ $( document ).ready(function() {
       
       $("#"+player).append(image);
       
-      if(player == ("player" + (showCards+1).toString())){
+      if(player == ("player" + (showCards+1).toString()) && numCard!=0){
       	
       	$("#"+player).find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
          $("#"+player).find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
