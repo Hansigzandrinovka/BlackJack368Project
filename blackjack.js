@@ -596,7 +596,8 @@ $( document ).ready(function() {
 
 ////// Game logic
 
-//Need to find citation from stackoverflow for this, not sure where I got it
+// found this function from http://stackoverflow.com/questions/7486085/copying-array-by-value-in-javascript
+// makes a deep copy of an object
 function copy(o) {
    var output, v, key;
    output = Array.isArray(o) ? [] : {};
