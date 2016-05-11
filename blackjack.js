@@ -466,7 +466,7 @@ $( document ).ready(function() {
         playerArray:playerEmpties,
         pot:0,
         console_message:"Enter the names of any players:",
-        showCards:false,
+        showCards:'none',
         buttonsToShow:"start"
     });
   }
@@ -533,14 +533,6 @@ $( document ).ready(function() {
     } else {
       refreshScreen(refresh);
     }
-  }
-
-  var exampleRefreshObj = {
-    playerArray:copy(this.players),
-    pot:0+(this.pot),
-    console_message:"",
-    showCards:true,
-    buttonsToShow:"none"
   }
 
   function refreshScreen(refreshObj){
@@ -625,7 +617,7 @@ function blackjackGame(){
         playerArray:copy(this.players),
         pot:0+(this.pot),
         console_message:'',
-        showCards:false,
+        showCards:'none',
         buttonsToShow:"none"
       });
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
@@ -633,7 +625,7 @@ function blackjackGame(){
         playerArray:copy(this.players),
         pot:0+(this.pot),
         console_message:'',
-        showCards:false,
+        showCards:'none',
         buttonsToShow:"none"
       });
     }
@@ -652,7 +644,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + ', please enter your bet.',
-          showCards:false,
+          showCards:0+i,
           buttonsToShow:"bet"
         });
         break;
@@ -664,7 +656,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + ' bets $' + this.players[i].bet + '.',
-          showCards:false,
+          showCards:'none',
           buttonsToShow:"none"
         });
       }
@@ -696,7 +688,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:'',
-          showCards:false,
+          showCards:'none',
           buttonsToShow:"none"
         });
         this.getBets();
@@ -719,7 +711,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + ', the bet is $' + this.maxbet + ', do you want to call or fold?',
-          showCards:true,
+          showCards:0+i,
           buttonsToShow:"call"
         });
         break;
@@ -740,7 +732,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + callstring,
-          showCards:true,
+          showCards:'none',
           buttonsToShow:"none"
         });
       } 
@@ -773,7 +765,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + callstring,
-          showCards:true,
+          showCards:0+i,
           buttonsToShow:"none"
         });
         this.getCalls();
@@ -791,7 +783,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:'Your move, ' + this.players[i].name + '!',
-          showCards:false,
+          showCards:0+i,
           buttonsToShow:"play"
         });
         break;
@@ -802,7 +794,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:false,
+            showCards:'none',
             buttonsToShow:"none"
           });
       }
@@ -830,7 +822,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:false,
+            showCards:0+i,
             buttonsToShow:"play"
           });
         }
@@ -840,7 +832,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:false,
+            showCards:0+i,
             buttonsToShow:"none"
           });
           this.playTurns();
@@ -893,7 +885,7 @@ function blackjackGame(){
       playerArray:copy(this.players),
       pot:0+(this.pot),
       console_message:'Round over. ' + winstring,
-      showCards:true,
+      showCards:'all',
       buttonsToShow:"continue" //need to add some kind of continue button to start a new round
     });
   };
@@ -1379,7 +1371,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 						playerArray:copy(gameObject.players),
 						pot:0+(gameObject.pot),
 						console_message:'',
-						showCards:false,
+						showCards:'none',
 						buttonsToShow:"none"
 					  });
 				}
@@ -1438,7 +1430,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 						playerArray:copy(gameObject.players),
 						pot:0+(gameObject.pot),
 						console_message:'',
-						showCards:false,
+						showCards:'none',
 						buttonsToShow:"none"
 					  });
 				}
@@ -1482,7 +1474,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					playerArray:copy(gameObject.players),
 					pot:0+(gameObject.pot),
 					console_message:'',
-					showCards:false,
+					showCards:'none',
 					buttonsToShow:"none"
 				  });
 			}
@@ -1530,7 +1522,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					playerArray:copy(gameObject.players),
 					pot:0+(gameObject.pot),
 					console_message:'',
-					showCards:false,
+					showCards:'none',
 					buttonsToShow:"none"
 				  });
 
