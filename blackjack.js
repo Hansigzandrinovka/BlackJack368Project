@@ -168,20 +168,23 @@ $( document ).ready(function() {
   		  
       });
 
-      $('#nameButton').click(function(e){
+      $('#startButton').click(function(e){//essentially the start button
 
-        e.preventDefault();
-
+        	e.preventDefault();
+			
+			//aesthetic changes to page
+     		$('h3').css('display', 'block');
      		$('h3').css('visibility', 'visible');
      		$('h4').css('visibility', 'visible');
      		
-      	$('#nameInputArea').css('display', 'none');
-      	$('#nameButton').css('display', 'none');
+      	$('h5').css('display', 'none');
+      	$('#startButton').css('display', 'none');
       	
       	
-  			var player_name = getPlayerName();
+      	//start the game
+  			var player_names = getPlayerNames(); //use this to get player names from the first page
 
-  			var players = [["AI1","Pro",10000,game],["AI2","Noob",10000,game],[player_name,null,10000,game],["AI3","Random Guy",10000,game],["AI4","Dealer Wannabe",10000,game]];
+  			var players = [["AI1","Pro",10000,game],["AI2","Noob",10000,game],["jimmy",null,10000,game],["AI3","Random Guy",10000,game],["AI4","Dealer Wannabe",10000,game]];
 	
   			game.initGame(players);
   			
@@ -364,10 +367,15 @@ $( document ).ready(function() {
     else if(whatToShow == "start"){
 
     	setButtons("none");
-		$('#nameButton').css('visibility', 'visible');
-      $('#nameInputLine').css('visibility', 'visible');
+		$('#human1').css('visibility', 'visible');
+		$('#human2').css('visibility', 'visible');
+		$('#human3').css('visibility', 'visible');
+		$('#human4').css('visibility', 'visible');
+		$('#human5').css('visibility', 'visible');		
+		
+		$('h4').css('visibility', 'visible');
+		$('#startButton').css('visibility', 'visible');
       $('h3').css('visibility', 'hidden');
-      $('#nameInputArea').css('visibility', 'visible');
 
     }
     else if(whatToShow == "continue"){
@@ -397,7 +405,7 @@ $( document ).ready(function() {
 		addRefresh({
         playerArray:playerEmpties,
         pot:0,
-        console_message:"",
+        console_message:"Enter the names of any players:",
         showCards:false,
         buttonsToShow:"start"
     });
@@ -410,10 +418,39 @@ $( document ).ready(function() {
   		return bet;
 	}
 
-	function getPlayerName(){
-		var player_name = $('#nameInput').val();
-  	$('#nameInput').val("");
-  	return player_name;
+	function getPlayerNames(){
+		
+		var player_names = []; //used to store player names
+		
+				
+		if($('#human1').val() != "" ){ //if the text field is not empty
+		
+			player_names.push($('#human1').val()); //add the player name to the array
+		}
+		if($('#human2').val() != "" ){
+		
+			player_names.push($('#human2').val());
+		}
+		if($('#human3').val() != "" ){
+		
+			player_names.push($('#human3').val());
+		}
+		if($('#human4').val() != "" ){
+		
+			player_names.push($('#human4').val());
+		}
+		if($('#human5').val() != "" ){
+		
+			player_names.push($('#human5').val());
+		}
+		
+  		$('#human1').val("");
+  		$('#human2').val("");
+  		$('#human3').val("");
+  		$('#human4').val("");
+  		$('#human5').val("");
+  		
+  		return player_names;
 	}
 
   var refreshQueue = [];
@@ -543,7 +580,7 @@ function blackjackGame(){
         playerArray:copy(this.players),
         pot:0+(this.pot),
         console_message:'',
-        showCards:true,
+        showCards:false,
         buttonsToShow:"none"
       });
       this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
@@ -551,7 +588,7 @@ function blackjackGame(){
         playerArray:copy(this.players),
         pot:0+(this.pot),
         console_message:'',
-        showCards:true,
+        showCards:false,
         buttonsToShow:"none"
       });
     }
@@ -570,7 +607,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + ', please enter your bet.',
-          showCards:true,
+          showCards:false,
           buttonsToShow:"bet"
         });
         break;
@@ -582,7 +619,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:this.players[i].name + ' bets $' + this.players[i].bet + '.',
-          showCards:true,
+          showCards:false,
           buttonsToShow:"none"
         });
       }
@@ -606,7 +643,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:'',
-          showCards:true,
+          showCards:false,
           buttonsToShow:"none"
         });
         this.getBets();
@@ -624,7 +661,7 @@ function blackjackGame(){
           playerArray:copy(this.players),
           pot:0+(this.pot),
           console_message:'Your move, ' + this.players[i].name + '!',
-          showCards:true,
+          showCards:false,
           buttonsToShow:"play"
         });
         break;
@@ -635,7 +672,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:true,
+            showCards:false,
             buttonsToShow:"none"
           });
         // var move = [];
@@ -679,7 +716,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:true,
+            showCards:false,
             buttonsToShow:"play"
           });
         }
@@ -689,7 +726,7 @@ function blackjackGame(){
             playerArray:copy(this.players),
             pot:0+(this.pot),
             console_message:'',
-            showCards:true,
+            showCards:false,
             buttonsToShow:"none"
           });
           this.playTurns();
@@ -1232,7 +1269,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 						playerArray:copy(gameObject.players),
 						pot:0+(gameObject.pot),
 						console_message:'',
-						showCards:true,
+						showCards:false,
 						buttonsToShow:"none"
 					  });
 				}
@@ -1291,7 +1328,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 						playerArray:copy(gameObject.players),
 						pot:0+(gameObject.pot),
 						console_message:'',
-						showCards:true,
+						showCards:false,
 						buttonsToShow:"none"
 					  });
 				}
@@ -1335,7 +1372,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					playerArray:copy(gameObject.players),
 					pot:0+(gameObject.pot),
 					console_message:'',
-					showCards:true,
+					showCards:false,
 					buttonsToShow:"none"
 				  });
 			}
@@ -1383,7 +1420,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 					playerArray:copy(gameObject.players),
 					pot:0+(gameObject.pot),
 					console_message:'',
-					showCards:true,
+					showCards:false,
 					buttonsToShow:"none"
 				  });
 
