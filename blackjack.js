@@ -36,7 +36,7 @@ var cards = [
         "Cards/7_of_diamonds.png",
         "Cards/8_of_diamonds.png",
         "Cards/9_of_diamonds.png",
-        "Cards/9_of_diamonds.png",
+        "Cards/10_of_diamonds.png",
         "Cards/jack_of_diamonds.png",
         "Cards/queen_of_diamonds.png",
         "Cards/king_of_diamonds.png",
