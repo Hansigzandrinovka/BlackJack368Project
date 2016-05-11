@@ -1239,7 +1239,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		var AICall = true;
 		if(this.isAI != null) 
 		{
-			//AICall = this.getAICall(amount); //should return true or false
+			AICall = this.getAICall(amount); //should return true or false
       if(!AICall || ((amount - this.bet) > this.banked))
       {
         this.folded = true;
@@ -1654,7 +1654,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		}
 		else if(this.isAI == "Noob")
 		{
-			if(this.getTotalAmount() < 10)
+			if(this.getTotalAmount() >= 14)
 			{
 				return true;
 			}
