@@ -883,7 +883,7 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
     var winners = [];
     var max = 0;
 	
-    for(var i=0; i<this.participants.length; i++){
+    for(var i=0; i<participants.length; i++){
       /*if(this.participants[i].folded) //if player should not be a victor, and should be excluded from further evaluations
 		{
 			participants = (this.participants.splice(0,i) + this.participants.splice(i + 1,this.participants.length));
@@ -891,9 +891,9 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
 			j--; //step back one (will step forward afterwards because of for loop)
 			//rebuilds the participants array around the given folded player so they are ignored
 		}*/
-      /*else*/if((!this.participants[i].busted)){ //if player could feasibly win this game *ignores folded players*
+      /*else*/if((!participants[i].busted)){ //if player could feasibly win this game *ignores folded players*
       	
-        if(this.participants[i].getTotalAmount() > max){
+        if(participants[i].getTotalAmount() > max){
         	
           winners = [this.players[i]];
           max = this.players[i].getTotalAmount();
@@ -952,7 +952,7 @@ function blackjackGame(){ //the main class for game operations (as opposed to th
     	
 			if(winners[j].name == this.players[i].name){
 			
-				this.players[i].givePlayerMoney(amount);
+				this.players[i].givePlayerMoney(Math.floor(amount));
 			}    		
     		
     	}
@@ -1655,7 +1655,7 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		{
 			return true;
 		}
-		elwse if(this.isAI == "Random Guy")
+		else if(this.isAI == "Random Guy")
 		{
 			var call = Math.floor((Math.random() * 2) + 1);
 			
