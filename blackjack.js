@@ -210,6 +210,26 @@ $( document ).ready(function() {
         $('#continue').css('visibility', 'hidden');
 		  $('#quit').css('visibility', 'hidden');
       });
+      
+      $('#call').click(function(e){
+        e.preventDefault();
+		
+			$('#call').css('visibility', 'hidden');
+			$('#fold').css('visibility', 'hidden');
+			
+			//do something else
+      });
+      
+      $('#fold').click(function(e){
+        e.preventDefault();
+		
+			$('#call').css('visibility', 'hidden');
+			$('#fold').css('visibility', 'hidden');
+			
+			//do something else
+		
+      });
+      
   });
 
   function addCard(num,suit,player,numCard,showCards){
@@ -237,7 +257,7 @@ $( document ).ready(function() {
       
       $("#"+player).append(image);
       
-      if(player == "player" + (showCards+1).toString()){
+      if(player == ("player" + (showCards+1).toString())){
       	
       	$("#"+player).find("img").last().attr("onmouseover","this.src = '" + cardUrl + "'");
          $("#"+player).find("img").last().attr("onmouseout","this.src = 'Cards/card_back.png'");
@@ -414,6 +434,12 @@ $( document ).ready(function() {
 		setButtons("none");
 		$('#continue').css('visibility', 'visible');
 		$('#quit').css('visibility', 'visible');    
+    }
+    else if(whatToShow == "call"){
+    
+    	setButtons("none");
+		$('#call').css('visibility', 'visible');
+		$('#fold').css('visibility', 'visible');
     }
 
 
