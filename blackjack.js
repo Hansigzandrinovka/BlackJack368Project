@@ -494,7 +494,7 @@ function blackjackGame(){
   //create a new game object (e.g. game); call game.initGame() on the object, passing in player definitions; call game.deck.initDeck().
   this.deck = new Deck();
   this.players = [];
-
+  this.maxbet = 0;
   this.initGame = function(playerDefs){
     //exactly 5 players are required
     this.initPlayers(playerDefs);
@@ -509,30 +509,14 @@ function blackjackGame(){
   this.pot = 0;
 
   this.startGame = function(name){ //called when player clicks start button - every time game , it asks player to keep playing, which calls startGame method
-    console.log(this.deck.active.length + this.deck.discards.length);
-	
-	//this.resetGame();
-	
-    // this.getBets();
-    // this.playTurns();
-    // this.resolveGame();
 
-    // refreshScreen({
-    //   playerArray:this.players,
-    //   pot:0,
-    //   console_message:'Welcome to BlackJack!',
-    //   showCards:true,
-    //   buttonsToShow:"none"
-    // });
     this.dealCards();
     this.getBets();
-	//this.resolveGame();
   };
 
   this.resetGame = function(){ //prepare game for next round - every time game ends, game is reset
     this.resetPlayers();
     this.pot = 0;
-    //setTimeout(refreshScreen.bind(null, this.players, this.pot, "Let's begin.",false,"none"),this.refreshDelay);
     this.startGame();
   };
 
@@ -588,18 +572,26 @@ function blackjackGame(){
       }
 
       if(i == this.players.length-1){
-        this.playTurns();
+        this.maxbet = this.getMaxBet();
+        this.getCalls();
       }
     }
   }
+  
+  this.getMaxBet = function(){
+    max = 0;
+    for(var i=0; i<this.players.length; i++){
+        if(this.players[i].bet > max){
+          max = this.players[i].bet;
+        }
+    }
+    return max;
+  };
 
   this.setPlayerBet = function(bet){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && !this.players[i].betPlaced){
         this.players[i].setBet(bet);
-//Dummy info until setBet is written
-        //this.players[i].bet = 100;
-        //this.players[i].banked -= 100;
         this.pot += bet;
         this.players[i].betPlaced = true;
         addRefresh({
@@ -614,7 +606,73 @@ function blackjackGame(){
       }
     }
   }
+  
+  //Need to:
+  //add maxbet attribute to game
+  //Added folded, callPlaced attributes to players
+  //iterate through the players a second time, asking for call or fold.
+  //need call/fold buttons
+  //if player had the max bet, do we interact with player? Sure. Ea
+  
+  this.getCalls = function(call){
+    for(var i=0; i<this.players.length; i++){
+      if(this.players[i].isAI === null && !this.players[i].callPlaced){
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:0+(this.pot),
+          console_message:this.players[i].name + ', the bet is $' + this.maxbet + ', do you want to call or fold?',
+          showCards:true,
+          buttonsToShow:"none"
+        });
+        break;
+      } else if(this.players[i].isAI && !this.players[i].callPlaced){ //if AI and hasn't placed bet, get their bet amount and move on
+        //this.players[i].setCall(null); //needs to set folded attribute
+        //right now, AIs always call
+        
+        this.players[i].callPlaced = true;
+        var callstring = "";
+        if(this.players[i].folded){
+          callstring = " folds.";
+        } else {
+          callstring = " calls.";
+        }
+        
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:0+(this.pot),
+          console_message:this.players[i].name + callstring,
+          showCards:true,
+          buttonsToShow:"none"
+        });
+      } else if(call){
+        if(call === "fold"){
+          this.players[i].folded = true;
+        }
 
+        this.players[i].callPlaced = true;
+        
+        var callstring = "";
+        if(this.players[i].folded){
+          callstring = " folds.";
+        } else {
+          callstring = " calls.";
+        }
+        addRefresh({
+          playerArray:copy(this.players),
+          pot:0+(this.pot),
+          console_message:this.players[i].name + callstring,
+          showCards:true,
+          buttonsToShow:"none"
+        });
+        this.getCalls();
+      }
+      
+      if(i == this.players.length-1){
+        this.playTurns();
+      }
+    }
+  };
+//need to deal with skipping over players who folded
   this.playTurns = function(){
     for(var i=0; i<this.players.length; i++){
       if(this.players[i].isAI === null && this.players[i].turnStatus === "unplayed"){
@@ -638,22 +696,6 @@ function blackjackGame(){
             showCards:true,
             buttonsToShow:"none"
           });
-        // var move = [];
-        // while(this.players[i].busted === false && this.players[i].turnStatus === "inprogress"){
-        //   move = this.players[i].getMove(); //it is player's turn - will he hit or stand? - for AI, getMove() returns current AI action
-        //   if(move == 'stand'){ //player waits for round to end
-        //     this.players[i].turnStatus = "finished";
-        //   }
-        //   else if(move == 'hit'){ //player gets another card
-        //     this.players[i].givePlayerCard(this.deck.drawCards(1)[0]);
-        //     var amount = this.players[i].getTotalAmount();
-        //     if(amount > 21){
-        //       this.players[i].busted = true;
-        //       this.players[i].turnStatus = "finished";
-        //     }
-        //   }
-        //   setTimeout(refreshScreen.bind(null, this.players, this.pot, "", true, 'none'), this.refreshDelay);
-        // }
       }
 
       if(i == this.players.length-1){
@@ -879,11 +921,12 @@ function Player(name, isAI, initialBanked,gameObject) //jack 11 (10), queen 12 (
 		this.name = name; //player name will determined by the html component of gui
 	} //player name will determined by the html component of gui
 
-
 	this.isAI = isAI; //null for not AI
 	this.busted = false; // track if player over 21 or not
-    this.turnStatus = "unplayed";
-    this.betPlaced = false;
+  this.turnStatus = "unplayed";
+  this.betPlaced = false;
+  this.callPlaced = false;
+  this.folded = false;
 
 	this.cardVals = []; //stores the values on the list
 	this.cardSuites = [];
